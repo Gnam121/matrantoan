@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo ma trận đề kiểm tra môn Toán THCS</title>
+    <title>Tạo ma trận Toán THCS - QGN</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
@@ -27,7 +27,7 @@
             <i class="fa-solid fa-calculator text-2xl text-amber-400"></i>
             <div>
                 <h1 class="text-lg font-bold">HỆ THỐNG TẠO MA TRẬN ĐỀ KIỂM TRA TOÁN THCS</h1>
-                <p class="text-xs text-indigo-200">Bản thử nghiệm - 2026</p>
+                <p class="text-xs text-indigo-200">Bản thử nghiệm 2026</p>
             </div>
         </div>
         <span class="bg-amber-400 text-indigo-950 font-bold px-3 py-1 rounded-full text-xs">QUÁCH GIANG NAM</span>
@@ -273,6 +273,7 @@
     </main>
 
     <script>
+        // KHO DỮ LIỆU ĐẦY ĐỦ BÀI HỌC VÀ TIẾT LUYỆN TẬP CHUNG
         const MATH_CHAPTERS = {
             "6": [
                 { chapter: "Chương I. Tập hợp các số tự nhiên", unitName: "Số tự nhiên và tập hợp các số tự nhiên", lessons: [{ name: "Bài 1. Tập hợp", periods: 1 }, { name: "Bài 2. Cách ghi số tự nhiên", periods: 1 }, { name: "Bài 3. Thứ tự trong tập hợp các số tự nhiên", periods: 1 }, { name: "Bài 4. Phép cộng và phép trừ số tự nhiên", periods: 1 }, { name: "Bài 5. Phép nhân và phép chia số tự nhiên", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 6. Luỹ thừa với số mũ tự nhiên", periods: 2 }, { name: "Bài 7. Thứ tự thực hiện các phép tính", periods: 1 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương I", periods: 2 }] },
@@ -310,16 +311,16 @@
                 { chapter: "Chương X. Một số hình khối trong thực tiễn", unitName: "Hình chóp tam giác đều và hình chóp tứ giác đều", lessons: [{ name: "Bài 38. Hình chóp tam giác đều", periods: 3 }, { name: "Bài 39. Hình chóp tứ giác đều", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương X", periods: 2 }] }
             ],
             "9": [
-                { chapter: "Chương I. Phương trình và hệ hai phương trình bậc nhất hai ẩn", unitName: "Phương trình và hệ hai phương trình bậc nhất hai ẩn", lessons: [{ name: "Bài 1. Khái niệm phương trình và hệ hai phương trình bậc nhất hai ẩn", periods: 2 }, { name: "Bài 2. Giải hệ hai phương trình bậc nhất hai ẩn", periods: 3 }, { name: "Bài 3. Giải bài toán bằng cách lập hệ phương trình", periods: 2 }, { name: "Bài tập cuối chương I", periods: 2 }] },
-                { chapter: "Chương II. Phương trình và bất phương trình bậc nhất một ẩn", unitName: "Phương trình quy về phương trình bậc nhất và bất phương trình một ẩn", lessons: [{ name: "Bài 4. Phương trình quy về phương trình bậc nhất một ẩn", periods: 2 }, { name: "Bài 5. Bất đẳng thức và tính chất", periods: 2 }, { name: "Bài 6. Bất phương trình bậc nhất một ẩn", periods: 3 }, { name: "Bài tập cuối chương II", periods: 2 }] },
-                { chapter: "Chương III. Căn bậc hai và căn bậc ba", unitName: "Căn bậc hai, căn thức bậc hai và các phép biến đổi đơn giản", lessons: [{ name: "Bài 7. Căn bậc hai và căn thức bậc hai", periods: 3 }, { name: "Bài 8. Khai căn bậc hai với phép nhân và phép chia", periods: 3 }, { name: "Bài 9. Biến đổi đơn giản và rút gọn biểu thức chứa căn thức bậc hai", periods: 4 }, { name: "Bài 10. Căn bậc ba và căn thức bậc ba", periods: 2 }, { name: "Bài tập cuối chương III", periods: 2 }] },
-                { chapter: "Chương IV. Hệ thức lượng trong tam giác vuông", unitName: "Một số hệ thức về cạnh, góc trong tam giác vuông và ứng dụng", lessons: [{ name: "Bài 11. Tỉ số lượng giác của góc nhọn", periods: 3 }, { name: "Bài 12. Một số hệ thức giữa cạnh và góc trong tam giác vuông", periods: 3 }, { name: "Bài tập cuối chương IV", periods: 2 }] },
-                { chapter: "Chương V. Đường tròn", unitName: "Đường tròn, tiếp tuyến, góc với đường tròn và tứ giác nội tiếp", lessons: [{ name: "Bài 13. Mở đầu về đường tròn", periods: 2 }, { name: "Bài 14. Cung và dây của một đường tròn", periods: 2 }, { name: "Bài 15. Độ dài của cung tròn. Diện tích hình quạt tròn và hình vành khuyên", periods: 2 }, { name: "Bài 16. Vị trí tương đối của đường thẳng và đường tròn", periods: 3 }, { name: "Bài 17. Vị trí tương đối của hai đường tròn", periods: 3 }, { name: "Bài tập cuối chương V", periods: 2 }] },
-                { chapter: "Chương VI. Hàm số y = ax^2 và phương trình bậc hai một ẩn", unitName: "Hàm số y = ax^2, phương trình bậc hai và định lí Viète", lessons: [{ name: "Bài 18. Hàm số y = ax^2 (a khác 0)", periods: 2 }, { name: "Bài 19. Phương trình bậc hai một ẩn", periods: 3 }, { name: "Bài 20. Định lí Viète và ứng dụng", periods: 3 }, { name: "Bài 21. Giải bài toán bằng cách lập phương trình", periods: 3 }, { name: "Bài tập cuối chương VI", periods: 2 }] },
-                { chapter: "Chương VII. Tần số và tần số tương đối", unitName: "Bảng tần số, tần số tương đối và biểu đồ", lessons: [{ name: "Bài 22. Bảng tần số và biểu đồ tần số", periods: 2 }, { name: "Bài 23. Bảng tần số tương đối và biểu đồ tần số tương đối", periods: 2 }, { name: "Bài 24. Bảng tần số, tần số tương đối ghép nhóm và biểu đồ", periods: 3 }, { name: "Bài tập cuối chương VII", periods: 2 }] },
-                { chapter: "Chương VIII. Xác suất của biến cố trong một số mô hình", unitName: "Phép thử ngẫu nhiên và xác suất của biến cố", lessons: [{ name: "Bài 25. Phép thử ngẫu nhiên và không gian mẫu", periods: 2 }, { name: "Bài 26. Xác suất của biến cố liên quan tới phép thử", periods: 3 }, { name: "Bài tập cuối chương VIII", periods: 2 }] },
-                { chapter: "Chương IX. Đường tròn ngoại tiếp và đường tròn nội tiếp", unitName: "Góc nội tiếp, đường tròn ngoại tiếp, nội tiếp và đa giác đều", lessons: [{ name: "Bài 27. Góc nội tiếp", periods: 3 }, { name: "Bài 28. Đường tròn ngoại tiếp và đường tròn nội tiếp của một tam giác", periods: 3 }, { name: "Bài 29. Tứ giác nội tiếp", periods: 3 }, { name: "Bài 30. Đa giác đều", periods: 3 }, { name: "Bài tập cuối chương IX", periods: 2 }] },
-                { chapter: "Chương X. Một số hình khối trong thực tiễn", unitName: "Hình trụ, hình nón và hình cầu", lessons: [{ name: "Bài 31. Hình trụ và hình nón", periods: 3 }, { name: "Bài 32. Hình cầu", periods: 2 }, { name: "Bài tập cuối chương X", periods: 2 }] }
+                { chapter: "Chương I. Phương trình và hệ hai phương trình bậc nhất hai ẩn", unitName: "Phương trình và hệ hai phương trình bậc nhất hai ẩn", lessons: [{ name: "Bài 1. Khái niệm phương trình và hệ hai phương trình bậc nhất hai ẩn", periods: 2 }, { name: "Bài 2. Giải hệ hai phương trình bậc nhất hai ẩn", periods: 3 }, { name: "Bài 3. Giải bài toán bằng cách lập hệ phương trình", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương I", periods: 2 }] },
+                { chapter: "Chương II. Phương trình và bất phương trình bậc nhất một ẩn", unitName: "Phương trình quy về phương trình bậc nhất và bất phương trình một ẩn", lessons: [{ name: "Bài 4. Phương trình quy về phương trình bậc nhất một ẩn", periods: 2 }, { name: "Bài 5. Bất đẳng thức và tính chất", periods: 2 }, { name: "Bài 6. Bất phương trình bậc nhất một ẩn", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương II", periods: 2 }] },
+                { chapter: "Chương III. Căn bậc hai và căn bậc ba", unitName: "Căn bậc hai, căn thức bậc hai và các phép biến đổi đơn giản", lessons: [{ name: "Bài 7. Căn bậc hai và căn thức bậc hai", periods: 3 }, { name: "Bài 8. Khai căn bậc hai với phép nhân và phép chia", periods: 3 }, { name: "Bài 9. Biến đổi đơn giản và rút gọn biểu thức chứa căn thức bậc hai", periods: 4 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 10. Căn bậc ba và căn thức bậc ba", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương III", periods: 2 }] },
+                { chapter: "Chương IV. Hệ thức lượng trong tam giác vuông", unitName: "Một số hệ thức về cạnh, góc trong tam giác vuông và ứng dụng", lessons: [{ name: "Bài 11. Tỉ số lượng giác của góc nhọn", periods: 3 }, { name: "Bài 12. Một số hệ thức giữa cạnh và góc trong tam giác vuông", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương IV", periods: 2 }] },
+                { chapter: "Chương V. Đường tròn", unitName: "Đường tròn, tiếp tuyến, góc với đường tròn và tứ giác nội tiếp", lessons: [{ name: "Bài 13. Mở đầu về đường tròn", periods: 2 }, { name: "Bài 14. Cung và dây của một đường tròn", periods: 2 }, { name: "Bài 15. Độ dài của cung tròn. Diện tích hình quạt tròn và hình vành khuyên", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 16. Vị trí tương đối của đường thẳng và đường tròn", periods: 3 }, { name: "Bài 17. Vị trí tương đối của hai đường tròn", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương V", periods: 2 }] },
+                { chapter: "Chương VI. Hàm số y = ax^2 và phương trình bậc hai một ẩn", unitName: "Hàm số y = ax^2, phương trình bậc hai và định lí Viète", lessons: [{ name: "Bài 18. Hàm số y = ax^2 (a khác 0)", periods: 2 }, { name: "Bài 19. Phương trình bậc hai một ẩn", periods: 3 }, { name: "Bài 20. Định lí Viète và ứng dụng", periods: 3 }, { name: "Bài 21. Giải bài toán bằng cách lập phương trình", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VI", periods: 2 }] },
+                { chapter: "Chương VII. Tần số và tần số tương đối", unitName: "Bảng tần số, tần số tương đối và biểu đồ", lessons: [{ name: "Bài 22. Bảng tần số và biểu đồ tần số", periods: 2 }, { name: "Bài 23. Bảng tần số tương đối và biểu đồ tần số tương đối", periods: 2 }, { name: "Bài 24. Bảng tần số, tần số tương đối ghép nhóm và biểu đồ", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VII", periods: 2 }] },
+                { chapter: "Chương VIII. Xác suất của biến cố trong một số mô hình", unitName: "Phép thử ngẫu nhiên và xác suất của biến cố", lessons: [{ name: "Bài 25. Phép thử ngẫu nhiên và không gian mẫu", periods: 2 }, { name: "Bài 26. Xác suất của biến cố liên quan tới phép thử", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VIII", periods: 2 }] },
+                { chapter: "Chương IX. Đường tròn ngoại tiếp và đường tròn nội tiếp", unitName: "Góc nội tiếp, đường tròn ngoại tiếp, nội tiếp và đa giác đều", lessons: [{ name: "Bài 27. Góc nội tiếp", periods: 3 }, { name: "Bài 28. Đường tròn ngoại tiếp và đường tròn nội tiếp của một tam giác", periods: 3 }, { name: "Bài 29. Tứ giác nội tiếp", periods: 3 }, { name: "Bài 30. Đa giác đều", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương IX", periods: 2 }] },
+                { chapter: "Chương X. Một số hình khối trong thực tiễn", unitName: "Hình trụ, hình nón và hình cầu", lessons: [{ name: "Bài 31. Hình trụ và hình nón", periods: 3 }, { name: "Bài 32. Hình cầu", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương X", periods: 2 }] }
             ]
         };
 
@@ -588,7 +589,6 @@
                     let rowPtsTH = unit.ptsNLC_TH + unit.ptsDS_TH + unit.ptsTLN_TH + unit.ptsTL_TH;
                     let rowPtsVD = unit.ptsNLC_VD + unit.ptsDS_VD + unit.ptsTLN_VD + unit.ptsTL_VD;
 
-                    // TÍNH TỈ LỆ % ĐIỂM CHUẨN THEO ĐIỂM SỐ THỰC TẾ
                     let rowTotalScore = rowPtsNB + rowPtsTH + rowPtsVD;
                     let ratioPercent = Math.round((rowTotalScore / 10.0) * 100);
 
