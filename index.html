@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo Ma trận đề thi Toán THCS</title>
+    <title>Tạo ma trận đề kiểm tra môn Toán THCS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
@@ -26,8 +26,8 @@
         <div class="flex items-center space-x-3">
             <i class="fa-solid fa-square-root-variable text-2xl text-amber-400"></i>
             <div>
-                <h1 class="text-lg font-bold">HỆ THỐNG TẠO MA TRẬN ĐỀ KIỂM TRA TOÁN THCS</h1>
-                <p class="text-xs text-indigo-200">Bản thử nghiệm 2026</p>
+                <h1 class="text-lg font-bold">HỆ THỐNG TẠO MA TRẬN ĐỀ KIỂM TRA MÔN TOÁN</h1>
+                <p class="text-xs text-indigo-200">Bản thử nghiệm N1</p>
             </div>
         </div>
         <span class="bg-amber-400 text-indigo-950 font-bold px-3 py-1 rounded-full text-xs">QUÁCH GIANG NAM</span>
@@ -36,7 +36,7 @@
     <!-- Main Container Layout: Stacked (Full Width) -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 flex flex-col gap-5">
 
-        <!-- Control Panel Top (Full Width structured) -->
+        <!-- Control Panel Top -->
         <section class="bg-white p-5 rounded-xl shadow-sm space-y-4 no-print border border-slate-200">
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -51,16 +51,16 @@
                             <label class="block font-semibold text-slate-700 mb-1">Khối lớp:</label>
                             <select id="gradeSelect" class="w-full border rounded-lg p-2 bg-white font-bold text-indigo-800 focus:ring-2 focus:ring-indigo-500" onchange="loadGradeData()">
                                 <option value="6">Toán Lớp 6</option>
-                                <option value="7">Toán Lớp 7</option>
+                                <option value="7" selected>Toán Lớp 7</option>
                                 <option value="8">Toán Lớp 8</option>
-                                <option value="9" selected>Toán Lớp 9</option>
+                                <option value="9">Toán Lớp 9</option>
                             </select>
                         </div>
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Kỳ kiểm tra:</label>
                             <select id="examType" class="w-full border rounded-lg p-2 bg-white focus:ring-2 focus:ring-indigo-500" onchange="generateMatrixAndSpec()">
-                                <option value="GIỮA KÌ I" selected>GIỮA KÌ I</option>
-                                <option value="CUỐI KÌ I">CUỐI KÌ I</option>
+                                <option value="GIỮA KÌ I">GIỮA KÌ I</option>
+                                <option value="CUỐI KÌ I" selected>CUỐI KÌ I</option>
                                 <option value="GIỮA KÌ II">GIỮA KÌ II</option>
                                 <option value="CUỐI KÌ II">CUỐI KÌ II</option>
                             </select>
@@ -107,7 +107,7 @@
                         <div class="bg-white p-2 rounded border">
                             <label class="block font-bold text-indigo-900 mb-1">4. Tự luận:</label>
                             <div class="flex items-center space-x-1">
-                                <span>SL:</span> <input type="number" id="numTL" value="5" min="0" class="w-12 border rounded p-1 text-center font-bold" onchange="generateMatrixAndSpec()">
+                                <span>SL bài:</span> <input type="number" id="numTL" value="5" min="1" max="10" class="w-12 border rounded p-1 text-center font-bold" onchange="generateMatrixAndSpec()">
                                 <span>Đ.TL:</span> <input type="number" id="scoreTL" value="7.0" step="0.5" class="w-14 border rounded p-1 text-center font-bold text-emerald-700" onchange="generateMatrixAndSpec()">
                             </div>
                         </div>
@@ -133,7 +133,7 @@
 
             </div>
 
-            <!-- 3. Danh sách Bài học đầy đủ các khối -->
+            <!-- 3. Danh sách Bài học -->
             <div class="border-t pt-3">
                 <div class="flex justify-between items-center mb-2">
                     <h2 class="text-sm font-bold text-indigo-900 flex items-center">
@@ -152,7 +152,7 @@
 
         </section>
 
-        <!-- Preview Panel Bottom (Full Width & Large Display) -->
+        <!-- Preview Panel Bottom -->
         <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 print-area flex flex-col">
             
             <!-- Export Toolbar -->
@@ -184,13 +184,13 @@
                 <div class="text-center space-y-1">
                     <div class="flex justify-between text-xs font-bold uppercase tracking-wide">
                         <div class="text-center"><p id="docSchool">TRƯỜNG THCS MỸ THƯỢNG</p><p>TỔ TOÁN</p></div>
-                        <div class="text-center"><p>KIỂM TRA <span id="docExamType">GIỮA KÌ I</span> – TOÁN <span id="docGradeHeader">9</span></p><p>NĂM HỌC <span id="docYear">2026 - 2027</span></p></div>
+                        <div class="text-center"><p>KIỂM TRA <span id="docExamType">GIỮA KÌ I</span> – TOÁN <span id="docGradeHeader">7</span></p><p>NĂM HỌC <span id="docYear">2026 - 2027</span></p></div>
                     </div>
                 </div>
 
                 <!-- TAB 1: MA TRẬN -->
                 <div id="tabMatrixView">
-                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">A. MA TRẬN ĐỀ KIỂM TRA <span id="docExamTypeTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeTitle">9</span></h2>
+                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">A. MA TRẬN ĐỀ KIỂM TRA <span id="docExamTypeTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeTitle">7</span></h2>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full table-matrix border-collapse">
@@ -228,7 +228,7 @@
 
                 <!-- TAB 2: BẢN ĐẶC TẢ -->
                 <div id="tabSpecView" class="hidden">
-                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">B. BẢN ĐẶC TẢ ĐỀ KIỂM TRA <span id="docExamTypeSpecTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeSpecTitle">9</span></h2>
+                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">B. BẢN ĐẶC TẢ ĐỀ KIỂM TRA <span id="docExamTypeSpecTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeSpecTitle">7</span></h2>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full table-matrix border-collapse text-left">
@@ -769,7 +769,7 @@
             ]
         };
 
-        let currentGrade = "9";
+        let currentGrade = "7";
 
         window.onload = function() {
             loadGradeData();
@@ -784,7 +784,7 @@
             const container = document.getElementById('lessonTreeContainer');
             container.innerHTML = '';
 
-            const chapters = MATH_CHAPTERS[currentGrade] || MATH_CHAPTERS["9"];
+            const chapters = MATH_CHAPTERS[currentGrade] || MATH_CHAPTERS["7"];
 
             chapters.forEach((chap, cIdx) => {
                 let totalChapPeriods = chap.lessons.reduce((s, l) => s + l.periods, 0);
@@ -856,18 +856,50 @@
             return Math.round(val * 4) / 4;
         }
 
-        function roundToEssayScore(val) {
-            if (!val || val <= 0) return 0;
-            let rounded = Math.round(val * 2) / 2;
-            return Math.max(0.5, rounded);
-        }
-
         function formatCellContent(qCount, pts) {
             if (!qCount || qCount === 0 || !pts || pts === 0) return '';
             let standardizedPts = roundToStandardScore(pts);
             let ptsStr = standardizedPts.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
             return `<div class="cell-q">${qCount}</div><div class="cell-pts">(${ptsStr}đ)</div>`;
         }
+
+        function distributeSpreadCounts(totalCount, units, offset = 0) {
+            let n = units.length;
+            let resultMap = {};
+            units.forEach(u => resultMap[u.cIdx] = 0);
+            if (totalCount <= 0 || n === 0) return resultMap;
+
+            let sumP = 0;
+            units.forEach(u => sumP += u.periods);
+            if (sumP === 0) sumP = 1;
+
+            let items = units.map((u, i) => {
+                let exact = (u.periods / sumP) * totalCount;
+                let floorVal = Math.floor(exact);
+                return { unit: u, floor: floorVal, rem: exact - floorVal, originalIndex: i };
+            });
+
+            let allocated = items.reduce((s, x) => s + x.floor, 0);
+            let diff = totalCount - allocated;
+
+            items.sort((a, b) => {
+                if (Math.abs(b.rem - a.rem) > 0.0001) return b.rem - a.rem;
+                return ((a.originalIndex + offset) % n) - ((b.originalIndex + offset) % n);
+            });
+
+            items.forEach(x => x.count = x.floor);
+            for (let i = 0; i < diff; i++) {
+                let targetIdx = (i + offset) % items.length;
+                items[targetIdx].count += 1;
+            }
+
+            items.forEach(x => {
+                resultMap[x.unit.cIdx] = x.count;
+            });
+            return resultMap;
+        }
+
+        let globalEssayAllocation = [];
 
         function generateMatrixAndSpec() {
             document.getElementById('docSchool').innerText = document.getElementById('schoolName').value.toUpperCase();
@@ -876,7 +908,7 @@
             document.getElementById('docExamTypeSpecTitle').innerText = document.getElementById('examType').value.toUpperCase();
             document.getElementById('docYear').innerText = document.getElementById('schoolYear').value;
 
-            const chapters = MATH_CHAPTERS[currentGrade] || MATH_CHAPTERS["9"];
+            const chapters = MATH_CHAPTERS[currentGrade] || MATH_CHAPTERS["7"];
             const checkboxes = document.querySelectorAll('.lesson-checkbox:checked');
             
             let chapterDataMap = {};
@@ -921,11 +953,21 @@
             let numTLN = parseInt(document.getElementById('numTLN').value) || 2;
             let scoreTLN = parseFloat(document.getElementById('scoreTLN').value) || 0.5;
 
+            let numTL = parseInt(document.getElementById('numTL').value) || 5;
             let scoreTL = parseFloat(document.getElementById('scoreTL').value) || 7.0;
 
             let rateNB = (parseInt(document.getElementById('rateNB').value) || 40) / 100;
             let rateTH = (parseInt(document.getElementById('rateTH').value) || 40) / 100;
             let rateVD = (parseInt(document.getElementById('rateVD').value) || 20) / 100;
+
+            let nlcNB_count = Math.round(numNLC * rateNB);
+            let nlcTH_count = Math.round(numNLC * rateTH);
+            let nlcVD_count = numNLC - nlcNB_count - nlcTH_count;
+            if (nlcVD_count < 0) nlcVD_count = 0;
+
+            let nlcNB_map = distributeSpreadCounts(nlcNB_count, aggregatedUnits, 0);
+            let nlcTH_map = distributeSpreadCounts(nlcTH_count, aggregatedUnits, 1);
+            let nlcVD_map = distributeSpreadCounts(nlcVD_count, aggregatedUnits, 2);
 
             let maxPeriodsIdx = 0;
             let maxP = -1;
@@ -935,35 +977,82 @@
                     maxPeriodsIdx = i;
                 }
             });
+            let dsMap = {};
+            aggregatedUnits.forEach(u => dsMap[u.cIdx] = 0);
+            if (numDS > 0 && aggregatedUnits.length > 0) {
+                let targetIdx = (maxPeriodsIdx + 2) % aggregatedUnits.length;
+                dsMap[aggregatedUnits[targetIdx].cIdx] = numDS;
+            }
+
+            let tlnTH_count = Math.round(numTLN * 0.5);
+            let tlnVD_count = numTLN - tlnTH_count;
+            let tlnTH_map = distributeSpreadCounts(tlnTH_count, aggregatedUnits, 3);
+            let tlnVD_map = distributeSpreadCounts(tlnVD_count, aggregatedUnits, 4);
+
+            // PHÂN BỔ ĐÚNG SỐ LƯỢNG BÀI TỰ LUẬN (numTL) RẢI ĐỀU CÁC CHƯƠng & MỨC ĐỘ
+            let essayUnitsMap = distributeSpreadCounts(numTL, aggregatedUnits, 5);
+            globalEssayAllocation = [];
+            let essayIndexCounter = 1;
+
+            aggregatedUnits.forEach(unit => {
+                unit.essayList = [];
+                let countForUnit = essayUnitsMap[unit.cIdx] || 0;
+                let unitScoreTotal = (unit.periods / totalPeriods) * scoreTL;
+                
+                for(let k=0; k < countForUnit; k++) {
+                    let lvl = "Hiểu";
+                    let pVal = unitScoreTotal / countForUnit;
+                    if (k === 0 && rateNB > 0) lvl = "Biết";
+                    else if (k === countForUnit - 1 && rateVD > 0) lvl = "Vận dụng";
+                    
+                    let essayObj = {
+                        no: essayIndexCounter++,
+                        cIdx: unit.cIdx,
+                        level: lvl,
+                        pts: roundToStandardScore(pVal > 0 ? pVal : 1.0)
+                    };
+                    unit.essayList.push(essayObj);
+                    globalEssayAllocation.push(essayObj);
+                }
+            });
 
             aggregatedUnits.forEach((unit, idx) => {
-                let ratio = unit.periods / totalPeriods;
+                unit.nlcNB = nlcNB_map[unit.cIdx] || 0;
+                unit.nlcTH = nlcTH_map[unit.cIdx] || 0;
+                unit.nlcVD = nlcVD_map[unit.cIdx] || 0;
 
-                unit.nlcNB = Math.round(numNLC * ratio);
-                unit.nlcTH = 0; unit.nlcVD = 0;
                 unit.ptsNLC_NB = roundToStandardScore(unit.nlcNB * scoreNLC);
-                unit.ptsNLC_TH = 0; unit.ptsNLC_VD = 0;
+                unit.ptsNLC_TH = roundToStandardScore(unit.nlcTH * scoreNLC);
+                unit.ptsNLC_VD = roundToStandardScore(unit.nlcVD * scoreNLC);
 
-                unit.dsNB = 0; unit.dsTH = 0;
-                unit.dsVD = (idx === maxPeriodsIdx && numDS > 0) ? numDS : 0;
+                unit.dsVD = dsMap[unit.cIdx] || 0;
                 unit.ptsDS_NB = 0; unit.ptsDS_TH = 0;
                 unit.ptsDS_VD = roundToStandardScore(unit.dsVD * scoreDS);
 
                 unit.tlnNB = 0;
-                unit.tlnTH = Math.round(numTLN * ratio);
-                unit.tlnVD = 0;
+                unit.tlnTH = tlnTH_map[unit.cIdx] || 0;
+                unit.tlnVD = tlnVD_map[unit.cIdx] || 0;
                 unit.ptsTLN_NB = 0;
                 unit.ptsTLN_TH = roundToStandardScore(unit.tlnTH * scoreTLN);
-                unit.ptsTLN_VD = 0;
+                unit.ptsTLN_VD = roundToStandardScore(unit.tlnVD * scoreTLN);
 
-                let idealChapTLScore = scoreTL * ratio;
-                unit.ptsTL_NB = roundToEssayScore(idealChapTLScore * rateNB);
-                unit.ptsTL_TH = roundToEssayScore(idealChapTLScore * rateTH);
-                unit.ptsTL_VD = roundToEssayScore(idealChapTLScore * rateVD);
+                // Tổng điểm tự luận theo các mức độ trong chương
+                let ptsNB = 0, ptsTH = 0, ptsVD = 0;
+                let cntNB = 0, cntTH = 0, cntVD = 0;
 
-                unit.tlNB = unit.ptsTL_NB > 0 ? 1 : 0;
-                unit.tlTH = unit.ptsTL_TH > 0 ? 1 : 0;
-                unit.tlVD = unit.ptsTL_VD > 0 ? 1 : 0;
+                unit.essayList.forEach(es => {
+                    if (es.level === 'Biết') { ptsNB += es.pts; cntNB++; }
+                    else if (es.level === 'Hiểu') { ptsTH += es.pts; cntTH++; }
+                    else { ptsVD += es.pts; cntVD++; }
+                });
+
+                unit.ptsTL_NB = roundToStandardScore(ptsNB);
+                unit.ptsTL_TH = roundToStandardScore(ptsTH);
+                unit.ptsTL_VD = roundToStandardScore(ptsVD);
+
+                unit.tlNB = cntNB;
+                unit.tlTH = cntTH;
+                unit.tlVD = cntVD;
             });
 
             renderMatrixTable(aggregatedUnits);
@@ -1016,7 +1105,7 @@
                 let row = document.createElement('tr');
 
                 sumNLC_NB += unit.nlcNB; sumNLC_TH += unit.nlcTH; sumNLC_VD += unit.nlcVD;
-                sumDS_NB += unit.dsNB; sumDS_TH += unit.dsTH; sumDS_VD += unit.dsVD;
+                sumDS_NB += 0; sumDS_TH += 0; sumDS_VD += unit.dsVD;
                 sumTLN_NB += unit.tlnNB; sumTLN_TH += unit.tlnTH; sumTLN_VD += unit.tlnVD;
                 sumTL_NB += unit.tlNB; sumTL_TH += unit.tlTH; sumTL_VD += unit.tlVD;
 
@@ -1025,8 +1114,8 @@
                 ptsTLN_NB += unit.ptsTLN_NB; ptsTLN_TH += unit.ptsTLN_TH; ptsTLN_VD += unit.ptsTLN_VD;
                 ptsTL_NB += unit.ptsTL_NB; ptsTL_TH += unit.ptsTL_TH; ptsTL_VD += unit.ptsTL_VD;
 
-                let totalNB = unit.nlcNB + unit.dsNB + unit.tlnNB + unit.tlNB;
-                let totalTH = unit.nlcTH + unit.dsTH + unit.tlnTH + unit.tlTH;
+                let totalNB = unit.nlcNB + unit.tlnNB + unit.tlNB;
+                let totalTH = unit.nlcTH + unit.tlnTH + unit.tlTH;
                 let totalVD = unit.nlcVD + unit.dsVD + unit.tlnVD + unit.tlVD;
 
                 let rowPtsNB = unit.ptsNLC_NB + unit.ptsDS_NB + unit.ptsTLN_NB + unit.ptsTL_NB;
@@ -1034,6 +1123,10 @@
                 let rowPtsVD = unit.ptsNLC_VD + unit.ptsDS_VD + unit.ptsTLN_VD + unit.ptsTL_VD;
 
                 let ratioPercent = roundedPercentList[idx];
+
+                let cellTotalNB_Html = totalNB > 0 ? `${totalNB} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsNB)}đ)</span>` : (rowPtsNB > 0 ? `<span class="text-indigo-900">(${roundToStandardScore(rowPtsNB)}đ)</span>` : '');
+                let cellTotalTH_Html = totalTH > 0 ? `${totalTH} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsTH)}đ)</span>` : (rowPtsTH > 0 ? `<span class="text-indigo-900">(${roundToStandardScore(rowPtsTH)}đ)</span>` : '');
+                let cellTotalVD_Html = totalVD > 0 ? `${totalVD} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsVD)}đ)</span>` : (rowPtsVD > 0 ? `<span class="text-indigo-900">(${roundToStandardScore(rowPtsVD)}đ)</span>` : '');
 
                 row.innerHTML = `
                     <td>${idx + 1}</td>
@@ -1046,9 +1139,9 @@
                     <td class="bg-blue-50/30">${formatCellContent(unit.nlcVD, unit.ptsNLC_VD)}</td>
 
                     <!-- TN DS -->
-                    <td class="bg-amber-50/30">${formatCellContent(unit.dsNB, unit.ptsDS_NB)}</td>
-                    <td class="bg-amber-50/30">${formatCellContent(unit.dsTH, unit.ptsDS_TH)}</td>
-                    <td class="bg-amber-50/30">${unit.dsVD > 0 ? `<div class="cell-q">1 câu (4 ý)</div><div class="cell-pts">(${unit.ptsDS_VD}đ)</div>` : ''}</td>
+                    <td class="bg-amber-50/30"></td>
+                    <td class="bg-amber-50/30"></td>
+                    <td class="bg-amber-50/30">${unit.dsVD > 0 ? `<div class="cell-q">${unit.dsVD} câu (4 ý)</div><div class="cell-pts">(${unit.ptsDS_VD}đ)</div>` : ''}</td>
 
                     <!-- TN TLN -->
                     <td class="bg-yellow-50/30">${formatCellContent(unit.tlnNB, unit.ptsTLN_NB)}</td>
@@ -1056,14 +1149,14 @@
                     <td class="bg-yellow-50/30">${formatCellContent(unit.tlnVD, unit.ptsTLN_VD)}</td>
 
                     <!-- TL -->
-                    <td class="bg-emerald-50/30">${formatCellContent(unit.tlNB, unit.ptsTL_NB)}</td>
-                    <td class="bg-emerald-50/30">${formatCellContent(unit.tlTH, unit.ptsTL_TH)}</td>
-                    <td class="bg-emerald-50/30 font-bold">${formatCellContent(unit.tlVD, unit.ptsTL_VD)}</td>
+                    <td class="bg-emerald-50/30">${unit.tlNB > 0 ? `<div class="cell-q">${unit.tlNB} bài</div><div class="cell-pts">(${unit.ptsTL_NB}đ)</div>` : ''}</td>
+                    <td class="bg-emerald-50/30">${unit.tlTH > 0 ? `<div class="cell-q">${unit.tlTH} bài</div><div class="cell-pts">(${unit.ptsTL_TH}đ)</div>` : ''}</td>
+                    <td class="bg-emerald-50/30 font-bold">${unit.tlVD > 0 ? `<div class="cell-q">${unit.tlVD} bài</div><div class="cell-pts">(${unit.ptsTL_VD}đ)</div>` : ''}</td>
 
                     <!-- TỔNG -->
-                    <td class="bg-slate-100 font-bold">${totalNB ? `${totalNB} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsNB)}đ)</span>` : ''}</td>
-                    <td class="bg-slate-100 font-bold">${totalTH ? `${totalTH} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsTH)}đ)</span>` : ''}</td>
-                    <td class="bg-slate-100 font-bold">${totalVD ? `${totalVD} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsVD)}đ)</span>` : ''}</td>
+                    <td class="bg-slate-100 font-bold">${cellTotalNB_Html}</td>
+                    <td class="bg-slate-100 font-bold">${cellTotalTH_Html}</td>
+                    <td class="bg-slate-100 font-bold">${cellTotalVD_Html}</td>
 
                     <!-- TỈ LỆ % ĐIỂM -->
                     <td class="font-bold text-indigo-900">${ratioPercent}%</td>
@@ -1071,22 +1164,26 @@
                 tbody.appendChild(row);
             });
 
+            let totalNB_All = sumNLC_NB + sumTLN_NB + sumTL_NB;
+            let totalTH_All = sumNLC_TH + sumTLN_TH + sumTL_TH;
+            let totalVD_All = sumNLC_VD + sumDS_VD + sumTLN_VD + sumTL_VD;
+
             let rowTotalCâu = document.createElement('tr');
             rowTotalCâu.className = "font-bold text-xs bg-slate-100";
             rowTotalCâu.innerHTML = `
                 <td colspan="3" class="text-left font-bold">Tổng số câu (Tổng số tiết: ${totalPeriodsAll})</td>
                 <td>${sumNLC_NB}</td><td>${sumNLC_TH}</td><td>${sumNLC_VD}</td>
-                <td>${sumDS_NB}</td><td>${sumDS_TH}</td><td>${sumDS_VD}</td>
+                <td>0</td><td>0</td><td>${sumDS_VD}</td>
                 <td>${sumTLN_NB}</td><td>${sumTLN_TH}</td><td>${sumTLN_VD}</td>
                 <td>${sumTL_NB}</td><td>${sumTL_TH}</td><td>${sumTL_VD}</td>
-                <td>${sumNLC_NB + sumDS_NB + sumTLN_NB + sumTL_NB} câu</td>
-                <td>${sumNLC_TH + sumDS_TH + sumTLN_TH + sumTL_TH} câu</td>
-                <td>${sumNLC_VD + sumDS_VD + sumTLN_VD + sumTL_VD} câu</td>
+                <td class="text-indigo-950 font-extrabold">${totalNB_All} câu</td>
+                <td class="text-indigo-950 font-extrabold">${totalTH_All} câu</td>
+                <td class="text-indigo-950 font-extrabold">${totalVD_All} câu</td>
                 <td>100%</td>
             `;
             tbody.appendChild(rowTotalCâu);
 
-            let fmt = (val) => val > 0 ? roundToStandardScore(val).toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1') : '';
+            let fmt = (val) => val > 0 ? roundToStandardScore(val).toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1') : '0';
 
             let rateNBVal = parseInt(document.getElementById('rateNB').value) || 40;
             let rateTHVal = parseInt(document.getElementById('rateTH').value) || 40;
@@ -1127,9 +1224,13 @@
             const tbody = document.getElementById('specTableBody');
             tbody.innerHTML = '';
 
+            let numNLC = parseInt(document.getElementById('numNLC').value) || 0;
+            let numDS = parseInt(document.getElementById('numDS').value) || 0;
+            let numTLN = parseInt(document.getElementById('numTLN').value) || 0;
+
             let currentNLCNum = 1;
-            let currentTLNNum = 6;
-            let currentTLNum = 7;
+            let currentDSNum = numNLC + 1;
+            let currentTLNNum = numNLC + numDS + 1;
 
             aggregatedUnits.forEach((unit, idx) => {
                 let levels = [
@@ -1138,8 +1239,7 @@
                         qNLC: unit.nlcNB, 
                         qDS: 0, 
                         qTLN: unit.tlnNB, 
-                        ptsTL: unit.ptsTL_NB, 
-                        hasTL: unit.tlNB > 0, 
+                        essays: unit.essayList.filter(e => e.level === 'Biết'),
                         desc: `Nhận biết được các kiến thức cơ bản về ${unit.unitName}.` 
                     },
                     { 
@@ -1147,8 +1247,7 @@
                         qNLC: unit.nlcTH, 
                         qDS: 0, 
                         qTLN: unit.tlnTH, 
-                        ptsTL: unit.ptsTL_TH, 
-                        hasTL: unit.tlTH > 0, 
+                        essays: unit.essayList.filter(e => e.level === 'Hiểu'),
                         desc: `Hiểu và biểu diễn được các nội dung trong ${unit.unitName}.` 
                     },
                     { 
@@ -1156,13 +1255,15 @@
                         qNLC: unit.nlcVD, 
                         qDS: unit.dsVD, 
                         qTLN: unit.tlnVD, 
-                        ptsTL: unit.ptsTL_VD, 
-                        hasTL: unit.tlVD > 0, 
+                        essays: unit.essayList.filter(e => e.level === 'Vận dụng'),
                         desc: `Vận dụng linh hoạt kiến thức ${unit.unitName} vào giải quyết bài toán thực tiễn.` 
                     }
                 ];
 
-                levels.forEach((lvl, lvlIdx) => {
+                levels.forEach((lvl) => {
+                    let hasContent = lvl.qNLC > 0 || lvl.qDS > 0 || lvl.qTLN > 0 || lvl.essays.length > 0;
+                    if (!hasContent) return;
+
                     let row = document.createElement('tr');
 
                     let nlcStr = '';
@@ -1179,7 +1280,7 @@
 
                     let dsStr = '';
                     if (lvl.qDS > 0 && lvl.level === 'Vận dụng') {
-                        dsStr = `<div class="cell-q">Câu 5 (ý a,b,c,d)</div><div class="cell-pts">(1.0 điểm)</div>`;
+                        dsStr = `<div class="cell-q">Câu ${currentDSNum} (ý a,b,c,d)</div><div class="cell-pts">(1.0 điểm)</div>`;
                     }
 
                     let tlnStr = '';
@@ -1195,16 +1296,17 @@
                     }
 
                     let tlNB_Str = '', tlTH_Str = '', tlVD_Str = '';
-                    if (lvl.ptsTL > 0.05 && lvl.hasTL) {
-                        let standardizedPts = roundToEssayScore(lvl.ptsTL);
-                        let ptsFormatted = standardizedPts.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
-                        let assignedQuestionNumber = currentTLNum++;
-                        let subLabel = standardizedPts >= 1.0 ? `Bài ${assignedQuestionNumber} (ý a, b)` : `Bài ${assignedQuestionNumber}`;
-                        let contentStr = `<div class="cell-q">${subLabel}</div><div class="cell-pts">(${ptsFormatted} điểm)</div>`;
+                    if (lvl.essays.length > 0) {
+                        let htmlStr = '';
+                        lvl.essays.forEach(es => {
+                            let standardizedPts = roundToStandardScore(es.pts);
+                            let ptsFormatted = standardizedPts.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+                            htmlStr += `<div class="cell-q">Bài ${es.no}</div><div class="cell-pts">(${ptsFormatted} điểm)</div>`;
+                        });
 
-                        if (lvl.level === 'Biết') tlNB_Str = contentStr;
-                        else if (lvl.level === 'Hiểu') tlTH_Str = contentStr;
-                        else if (lvl.level === 'Vận dụng') tlVD_Str = contentStr;
+                        if (lvl.level === 'Biết') tlNB_Str = htmlStr;
+                        else if (lvl.level === 'Hiểu') tlTH_Str = htmlStr;
+                        else if (lvl.level === 'Vận dụng') tlVD_Str = htmlStr;
                     }
 
                     row.innerHTML = `
@@ -1229,7 +1331,7 @@
                         <td class="text-center bg-yellow-50/20">${tlnStr}</td>
                         <td class="text-center bg-yellow-50/20"></td>
 
-                        <!-- TL (Biết - Hiểu - Vận dụng) -->
+                        <!-- TL -->
                         <td class="text-center bg-emerald-50/20 font-bold">${tlNB_Str}</td>
                         <td class="text-center bg-emerald-50/20 font-bold">${tlTH_Str}</td>
                         <td class="text-center bg-emerald-50/20 font-bold">${tlVD_Str}</td>
@@ -1278,7 +1380,7 @@
             `);
             const a = document.createElement('a');
             a.href = URL.createObjectURL(converted);
-            a.download = `Ma_Tran_Dac_Ta_Toan_${currentGrade}_MyThuong.docx`;
+            a.download = `Ma_Tran_Dac_Ta_Toan_${currentGrade}_QGN.docx`;
             a.click();
         }
     </script>
