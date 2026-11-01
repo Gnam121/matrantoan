@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Tạo Ma Trận & Bản Đặc Tả Đề Thi Toán THCS</title>
+    <title>Tạo ma trận đề kiểm tra môn Toán THCS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
@@ -26,11 +26,11 @@
         <div class="flex items-center space-x-3">
             <i class="fa-solid fa-calculator text-2xl text-amber-400"></i>
             <div>
-                <h1 class="text-lg font-bold">HỆ THỐNG TẠO MA TRẬN & ĐẶC TẢ ĐỀ THI TOÁN THCS</h1>
-                <p class="text-xs text-indigo-200">Chuẩn hóa cột Tỉ lệ % điểm theo Điểm số thực tế</p>
+                <h1 class="text-lg font-bold">HỆ THỐNG TẠO MA TRẬN ĐỀ KIỂM TRA TOÁN THCS</h1>
+                <p class="text-xs text-indigo-200">Bản thử nghiệm - 2026</p>
             </div>
         </div>
-        <span class="bg-amber-400 text-indigo-950 font-bold px-3 py-1 rounded-full text-xs">TRƯỜNG THCS MỸ THƯỢNG</span>
+        <span class="bg-amber-400 text-indigo-950 font-bold px-3 py-1 rounded-full text-xs">QUÁCH GIANG NAM</span>
     </header>
 
     <!-- Main Container -->
@@ -677,7 +677,7 @@
                 `);
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(converted);
-                a.download = `Ma_Tran_Dac_Ta_Toan_${this.currentGrade}_MyThuong.docx`;
+                a.download = `Ma_Tran_Dac_Ta_Toan_${this.currentGrade}_QGN.docx`;
                 a.click();
             }
         };
