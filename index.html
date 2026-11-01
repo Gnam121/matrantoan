@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo ma trận đề kiểm tra môn Toán THCS</title>
+    <title>Hệ Thống Tạo Ma Trận & Bản Đặc Tả Đề Thi Toán THCS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
-        body { font-family: 'Roboto', sans-serif; background-color: #f1f5f9; }
-        .table-matrix td, .table-matrix th { border: 1px solid #000000; padding: 6px; text-align: center; vertical-align: middle; font-size: 11.5px; }
+        body { font-family: 'Roboto', sans-serif; background-color: #f8fafc; }
+        .table-matrix td, .table-matrix th { border: 1px solid #000000; padding: 5px; text-align: center; vertical-align: middle; font-size: 11px; }
         .cell-q { font-size: 11px; line-height: 1.2; }
         .cell-pts { color: #1e3a8a; font-weight: bold; font-size: 10px; }
         @media print {
@@ -24,16 +24,16 @@
     <!-- Header -->
     <header class="bg-indigo-900 text-white shadow-md no-print py-3 px-6 flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <i class="fa-solid fa-square-root-variable text-2xl text-amber-400"></i>
+            <i class="fa-solid fa-calculator text-2xl text-amber-400"></i>
             <div>
-                <h1 class="text-lg font-bold">HỆ THỐNG TẠO MA TRẬN ĐỀ KIỂM TRA MÔN TOÁN</h1>
-                <p class="text-xs text-indigo-200">Bản thử nghiệm N1</p>
+                <h1 class="text-lg font-bold">HỆ THỐNG TẠO MA TRẬN & ĐẶC TẢ ĐỀ THI TOÁN THCS</h1>
+                <p class="text-xs text-indigo-200">Chuẩn hóa cột Tỉ lệ % điểm theo Điểm số thực tế</p>
             </div>
         </div>
-        <span class="bg-amber-400 text-indigo-950 font-bold px-3 py-1 rounded-full text-xs">QUÁCH GIANG NAM</span>
+        <span class="bg-amber-400 text-indigo-950 font-bold px-3 py-1 rounded-full text-xs">TRƯỜNG THCS MỸ THƯỢNG</span>
     </header>
 
-    <!-- Main Container Layout: Stacked (Full Width) -->
+    <!-- Main Container -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 flex flex-col gap-5">
 
         <!-- Control Panel Top -->
@@ -41,7 +41,7 @@
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 
-                <!-- 1. Thông tin chung -->
+                <!-- 1. Cấu hình chung -->
                 <div class="bg-slate-50 p-3 rounded-lg border">
                     <h2 class="text-sm font-bold text-indigo-900 border-b pb-1.5 mb-2 flex items-center">
                         <i class="fa-solid fa-sliders mr-2 text-indigo-600"></i> 1. CẤU HÌNH ĐỀ KIỂM TRA
@@ -49,16 +49,16 @@
                     <div class="grid grid-cols-2 gap-2 text-xs">
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Khối lớp:</label>
-                            <select id="gradeSelect" class="w-full border rounded-lg p-2 bg-white font-bold text-indigo-800 focus:ring-2 focus:ring-indigo-500" onchange="loadGradeData()">
+                            <select id="gradeSelect" class="w-full border rounded-lg p-2 bg-white font-bold text-indigo-800 focus:ring-2 focus:ring-indigo-500" onchange="AppController.onGradeChange()">
                                 <option value="6">Toán Lớp 6</option>
-                                <option value="7" selected>Toán Lớp 7</option>
+                                <option value="7">Toán Lớp 7</option>
                                 <option value="8">Toán Lớp 8</option>
-                                <option value="9">Toán Lớp 9</option>
+                                <option value="9" selected>Toán Lớp 9</option>
                             </select>
                         </div>
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Kỳ kiểm tra:</label>
-                            <select id="examType" class="w-full border rounded-lg p-2 bg-white focus:ring-2 focus:ring-indigo-500" onchange="generateMatrixAndSpec()">
+                            <select id="examType" class="w-full border rounded-lg p-2 bg-white focus:ring-2 focus:ring-indigo-500" onchange="AppController.render()">
                                 <option value="GIỮA KÌ I">GIỮA KÌ I</option>
                                 <option value="CUỐI KÌ I" selected>CUỐI KÌ I</option>
                                 <option value="GIỮA KÌ II">GIỮA KÌ II</option>
@@ -67,68 +67,76 @@
                         </div>
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Năm học:</label>
-                            <input type="text" id="schoolYear" value="2026 - 2027" class="w-full border rounded-lg p-1.5 bg-white text-center font-bold" onchange="generateMatrixAndSpec()">
+                            <input type="text" id="schoolYear" value="2026 - 2027" class="w-full border rounded-lg p-1.5 bg-white text-center font-bold" onchange="AppController.render()">
                         </div>
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">Tên Trường:</label>
-                            <input type="text" id="schoolName" value="TRƯỜNG THCS MỸ THƯỢNG" class="w-full border rounded-lg p-1.5 bg-white font-bold" onchange="generateMatrixAndSpec()">
+                            <input type="text" id="schoolName" value="TRƯỜNG THCS MỸ THƯỢNG" class="w-full border rounded-lg p-1.5 bg-white font-bold" onchange="AppController.render()">
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. Cấu trúc số lượng câu hỏi & Điểm số & Tỉ lệ -->
+                <!-- 2. Cấu trúc số lượng & Tỉ lệ -->
                 <div class="bg-slate-50 p-3 rounded-lg border lg:col-span-2">
-                    <h2 class="text-sm font-bold text-indigo-900 border-b pb-1.5 mb-2 flex items-center">
-                        <i class="fa-solid fa-list-ol mr-2 text-indigo-600"></i> 2. CẤU TRÚC ĐỀ THI & TỶ LỆ NHẬN THỨC
-                    </h2>
+                    <div class="flex justify-between items-center border-b pb-1.5 mb-2">
+                        <h2 class="text-sm font-bold text-indigo-900 flex items-center">
+                            <i class="fa-solid fa-list-ol mr-2 text-indigo-600"></i> 2. CẤU TRÚC ĐỀ THI & TỶ LỆ NHẬN THỨC
+                        </h2>
+                        <div id="totalScoreBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            Tổng điểm: 10.0 / 10.0 đ
+                        </div>
+                    </div>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs mb-2">
                         <div class="bg-white p-2 rounded border">
                             <label class="block font-bold text-indigo-900 mb-1">1. TN Nhiều lựa chọn:</label>
                             <div class="flex items-center space-x-1">
-                                <span>SL:</span> <input type="number" id="numNLC" value="4" min="0" class="w-12 border rounded p-1 text-center font-bold" onchange="generateMatrixAndSpec()">
-                                <span>Đ/câu:</span> <input type="number" id="scoreNLC" value="0.25" step="0.05" class="w-14 border rounded p-1 text-center font-bold text-indigo-700" onchange="generateMatrixAndSpec()">
+                                <span>SL:</span> <input type="number" id="numNLC" value="12" min="0" class="w-12 border rounded p-1 text-center font-bold" onchange="AppController.render()">
+                                <span>Đ/câu:</span> <input type="number" id="scoreNLC" value="0.25" step="0.05" class="w-14 border rounded p-1 text-center font-bold text-indigo-700" onchange="AppController.render()">
                             </div>
                         </div>
                         <div class="bg-white p-2 rounded border">
                             <label class="block font-bold text-indigo-900 mb-1">2. TN Đúng – Sai:</label>
                             <div class="flex items-center space-x-1">
-                                <span>SL:</span> <input type="number" id="numDS" value="1" min="0" class="w-12 border rounded p-1 text-center font-bold" onchange="generateMatrixAndSpec()">
-                                <span>Đ/câu:</span> <input type="number" id="scoreDS" value="1.0" step="0.1" class="w-14 border rounded p-1 text-center font-bold text-indigo-700" onchange="generateMatrixAndSpec()">
+                                <span>SL:</span> <input type="number" id="numDS" value="0" min="0" placeholder="0" class="w-12 border rounded p-1 text-center font-bold" onchange="AppController.render()">
+                                <span>Đ/câu:</span> <input type="number" id="scoreDS" value="1.0" step="0.1" class="w-14 border rounded p-1 text-center font-bold text-indigo-700" onchange="AppController.render()">
                             </div>
                         </div>
                         <div class="bg-white p-2 rounded border">
                             <label class="block font-bold text-indigo-900 mb-1">3. TN Trả lời ngắn:</label>
                             <div class="flex items-center space-x-1">
-                                <span>SL:</span> <input type="number" id="numTLN" value="2" min="0" class="w-12 border rounded p-1 text-center font-bold" onchange="generateMatrixAndSpec()">
-                                <span>Đ/câu:</span> <input type="number" id="scoreTLN" value="0.5" step="0.1" class="w-14 border rounded p-1 text-center font-bold text-indigo-700" onchange="generateMatrixAndSpec()">
+                                <span>SL:</span> <input type="number" id="numTLN" value="0" min="0" placeholder="0" class="w-12 border rounded p-1 text-center font-bold" onchange="AppController.render()">
+                                <span>Đ/câu:</span> <input type="number" id="scoreTLN" value="0.5" step="0.1" class="w-14 border rounded p-1 text-center font-bold text-indigo-700" onchange="AppController.render()">
                             </div>
                         </div>
                         <div class="bg-white p-2 rounded border">
                             <label class="block font-bold text-indigo-900 mb-1">4. Tự luận:</label>
                             <div class="flex items-center space-x-1">
-                                <span>SL bài:</span> <input type="number" id="numTL" value="5" min="1" max="10" class="w-12 border rounded p-1 text-center font-bold" onchange="generateMatrixAndSpec()">
-                                <span>Đ.TL:</span> <input type="number" id="scoreTL" value="7.0" step="0.5" class="w-14 border rounded p-1 text-center font-bold text-emerald-700" onchange="generateMatrixAndSpec()">
+                                <span>SL bài:</span> <input type="number" id="numTL" value="5" min="0" max="10" class="w-12 border rounded p-1 text-center font-bold" onchange="AppController.render()">
+                                <span>Đ.TL:</span> <input type="number" id="scoreTL" value="7.0" step="0.5" class="w-14 border rounded p-1 text-center font-bold text-emerald-700" onchange="AppController.render()">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tỷ lệ Mức độ nhận thức -->
+                    <!-- Tỷ lệ Nhận thức -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                         <div class="bg-blue-50 p-1.5 rounded border border-blue-200 flex items-center justify-between">
                             <span class="text-blue-800 font-bold">Biết %:</span>
-                            <input type="number" id="rateNB" value="40" class="w-16 border rounded p-1 text-center font-bold bg-white" onchange="validateRates()">
+                            <input type="number" id="rateNB" value="40" min="0" max="100" class="w-16 border rounded p-1 text-center font-bold bg-white" onchange="AppController.render()">
                         </div>
                         <div class="bg-amber-50 p-1.5 rounded border border-amber-200 flex items-center justify-between">
                             <span class="text-amber-800 font-bold">Hiểu %:</span>
-                            <input type="number" id="rateTH" value="40" class="w-16 border rounded p-1 text-center font-bold bg-white" onchange="validateRates()">
+                            <input type="number" id="rateTH" value="40" min="0" max="100" class="w-16 border rounded p-1 text-center font-bold bg-white" onchange="AppController.render()">
                         </div>
                         <div class="bg-red-50 p-1.5 rounded border border-red-200 flex items-center justify-between">
                             <span class="text-red-800 font-bold">Vận dụng %:</span>
-                            <input type="number" id="rateVD" value="20" class="w-16 border rounded p-1 text-center font-bold bg-white" onchange="validateRates()">
+                            <input type="number" id="rateVD" value="20" min="0" max="100" class="w-16 border rounded p-1 text-center font-bold bg-white" onchange="AppController.render()">
                         </div>
                     </div>
-                    <p id="rateWarning" class="text-red-600 text-[11px] font-semibold mt-1 hidden">* Tổng 3 mức độ phải bằng 100%</p>
+                    <div id="validationAlert" class="text-red-600 text-[11px] font-bold mt-1.5 hidden flex items-center space-x-1">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span id="validationAlertText">Lỗi cấu hình!</span>
+                    </div>
                 </div>
 
             </div>
@@ -140,14 +148,12 @@
                         <i class="fa-solid fa-list-check mr-2 text-indigo-600"></i> 3. CHỌN NỘI DUNG THEO PPCT (Phân phối chương trình)
                     </h2>
                     <div class="space-x-1">
-                        <button onclick="selectAll(true)" class="text-xs bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-1 rounded hover:bg-indigo-200">Chọn tất cả</button>
-                        <button onclick="selectAll(false)" class="text-xs bg-slate-200 text-slate-700 font-semibold px-2.5 py-1 rounded hover:bg-slate-300">Bỏ chọn</button>
+                        <button onclick="AppController.selectAllLessons(true)" class="text-xs bg-indigo-100 text-indigo-800 font-semibold px-2.5 py-1 rounded hover:bg-indigo-200">Chọn tất cả</button>
+                        <button onclick="AppController.selectAllLessons(false)" class="text-xs bg-slate-200 text-slate-700 font-semibold px-2.5 py-1 rounded hover:bg-slate-300">Bỏ chọn</button>
                     </div>
                 </div>
                 
-                <div id="lessonTreeContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto border rounded-lg p-3 bg-slate-50 text-xs">
-                    <!-- Dynamic Chapters & Lessons Tree -->
-                </div>
+                <div id="lessonTreeContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto border rounded-lg p-3 bg-slate-50 text-xs"></div>
             </div>
 
         </section>
@@ -155,18 +161,17 @@
         <!-- Preview Panel Bottom -->
         <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 print-area flex flex-col">
             
-            <!-- Export Toolbar -->
             <div class="flex justify-between items-center mb-5 no-print border-b pb-3">
                 <div class="flex space-x-2">
-                    <button onclick="switchTab('matrix')" id="tabMatrixBtn" class="px-4 py-2 rounded-lg font-bold text-xs bg-indigo-800 text-white shadow">
+                    <button onclick="AppController.switchTab('matrix')" id="tabMatrixBtn" class="px-4 py-2 rounded-lg font-bold text-xs bg-indigo-800 text-white shadow">
                         <i class="fa-solid fa-table mr-1.5"></i> A. Ma trận Đề
                     </button>
-                    <button onclick="switchTab('spec')" id="tabSpecBtn" class="px-4 py-2 rounded-lg font-bold text-xs bg-slate-200 text-slate-700 hover:bg-slate-300">
+                    <button onclick="AppController.switchTab('spec')" id="tabSpecBtn" class="px-4 py-2 rounded-lg font-bold text-xs bg-slate-200 text-slate-700 hover:bg-slate-300">
                         <i class="fa-solid fa-file-lines mr-1.5"></i> B. Bản Đặc tả
                     </button>
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="exportWord()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center space-x-1.5 shadow transition">
+                    <button onclick="AppController.exportWord()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center space-x-1.5 shadow transition">
                         <i class="fa-solid fa-file-word text-sm"></i>
                         <span>Xuất File Word</span>
                     </button>
@@ -180,17 +185,16 @@
             <!-- Preview Document Body -->
             <div id="exportDocument" class="space-y-6 text-slate-900 leading-relaxed flex-1">
                 
-                <!-- Header Paper -->
                 <div class="text-center space-y-1">
                     <div class="flex justify-between text-xs font-bold uppercase tracking-wide">
                         <div class="text-center"><p id="docSchool">TRƯỜNG THCS MỸ THƯỢNG</p><p>TỔ TOÁN</p></div>
-                        <div class="text-center"><p>KIỂM TRA <span id="docExamType">GIỮA KÌ I</span> – TOÁN <span id="docGradeHeader">7</span></p><p>NĂM HỌC <span id="docYear">2026 - 2027</span></p></div>
+                        <div class="text-center"><p>KIỂM TRA <span id="docExamType">GIỮA KÌ I</span> – TOÁN <span id="docGradeHeader">9</span></p><p>NĂM HỌC <span id="docYear">2026 - 2027</span></p></div>
                     </div>
                 </div>
 
                 <!-- TAB 1: MA TRẬN -->
                 <div id="tabMatrixView">
-                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">A. MA TRẬN ĐỀ KIỂM TRA <span id="docExamTypeTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeTitle">7</span></h2>
+                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">A. MA TRẬN ĐỀ KIỂM TRA <span id="docExamTypeTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeTitle">9</span></h2>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full table-matrix border-collapse">
@@ -228,7 +232,7 @@
 
                 <!-- TAB 2: BẢN ĐẶC TẢ -->
                 <div id="tabSpecView" class="hidden">
-                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">B. BẢN ĐẶC TẢ ĐỀ KIỂM TRA <span id="docExamTypeSpecTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeSpecTitle">7</span></h2>
+                    <h2 class="text-center font-extrabold text-sm mb-4 uppercase tracking-wide">B. BẢN ĐẶC TẢ ĐỀ KIỂM TRA <span id="docExamTypeSpecTitle">GIỮA KÌ I</span> – TOÁN <span id="docGradeSpecTitle">9</span></h2>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full table-matrix border-collapse text-left">
@@ -271,1118 +275,414 @@
     <script>
         const MATH_CHAPTERS = {
             "6": [
-                {
-                    chapter: "Chương I. Tập hợp các số tự nhiên",
-                    unitName: "Số tự nhiên và tập hợp các số tự nhiên",
-                    lessons: [
-                        { name: "Bài 1. Tập hợp", periods: 1 },
-                        { name: "Bài 2. Cách ghi số tự nhiên", periods: 1 },
-                        { name: "Bài 3. Thứ tự trong tập hợp các số tự nhiên", periods: 1 },
-                        { name: "Bài 4. Phép cộng và phép trừ số tự nhiên", periods: 1 },
-                        { name: "Bài 5. Phép nhân và phép chia số tự nhiên", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 6. Luỹ thừa với số mũ tự nhiên", periods: 2 },
-                        { name: "Bài 7. Thứ tự thực hiện các phép tính", periods: 1 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương I", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương II. Tính chia hết",
-                    unitName: "Quan hệ chia hết, số nguyên tố, ước chung và bội chung",
-                    lessons: [
-                        { name: "Bài 8. Quan hệ chia hết và tính chất", periods: 2 },
-                        { name: "Bài 9. Dấu hiệu chia hết", periods: 2 },
-                        { name: "Bài 10. Số nguyên tố", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 11. Ước chung. Ước chung lớn nhất", periods: 3 },
-                        { name: "Bài 12. Bội chung. Bội chung nhỏ nhất", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương II", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương III. Số nguyên",
-                    unitName: "Tập hợp số nguyên và các phép tính",
-                    lessons: [
-                        { name: "Bài 13. Tập hợp các số nguyên", periods: 2 },
-                        { name: "Bài 14. Phép cộng và phép trừ số nguyên", periods: 3 },
-                        { name: "Bài 15. Quy tắc dấu ngoặc", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 16. Phép nhân số nguyên", periods: 2 },
-                        { name: "Bài 17. Phép chia hết. Ước và bội của một số nguyên", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương III", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IV. Một số hình phẳng trong thực tiễn",
-                    unitName: "Tam giác đều, hình vuông, hình chữ nhật và các hình phẳng",
-                    lessons: [
-                        { name: "Bài 18. Hình tam giác đều. Hình vuông. Hình lục giác đều", periods: 3 },
-                        { name: "Bài 19. Hình chữ nhật. Hình thoi. Hình bình hành. Hình thang cân", periods: 4 },
-                        { name: "Bài 20. Chu vi và diện tích của một số tứ giác đã học", periods: 4 },
-                        { name: "Luyện tập chung", periods: 2 },
-                        { name: "Bài tập cuối chương IV", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương V. Tính đối xứng của hình phẳng",
-                    unitName: "Hình có trục đối xứng và hình có tâm đối xứng",
-                    lessons: [
-                        { name: "Bài 21. Hình có trục đối xứng", periods: 3 },
-                        { name: "Bài 22. Hình có tâm đối xứng", periods: 3 },
-                        { name: "Luyện tập chung", periods: 2 },
-                        { name: "Bài tập cuối chương V", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VI. Phân số",
-                    unitName: "Khái niệm phân số và các phép tính với phân số",
-                    lessons: [
-                        { name: "Bài 23. Mở rộng khái niệm phân số. Phân số bằng nhau", periods: 3 },
-                        { name: "Bài 24. So sánh phân số. Hỗn số dương", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 25. Phép cộng và phép trừ phân số", periods: 3 },
-                        { name: "Bài 26. Phép nhân và phép chia phân số", periods: 3 },
-                        { name: "Bài 27. Hai bài toán về phân số", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VI", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VII. Số thập phân",
-                    unitName: "Số thập phân và các bài toán về tỉ số phần trăm",
-                    lessons: [
-                        { name: "Bài 28. Số thập phân", periods: 2 },
-                        { name: "Bài 29. Tính toán với số thập phân", periods: 3 },
-                        { name: "Bài 30. Làm tròn và ước lượng", periods: 3 },
-                        { name: "Bài 31. Một số bài toán về tỉ số và tỉ số phần trăm", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VIII. Hình học cơ bản",
-                    unitName: "Điểm, đường thẳng, đoạn thẳng và góc",
-                    lessons: [
-                        { name: "Bài 32. Điểm và đường thẳng", periods: 2 },
-                        { name: "Bài 33. Điểm nằm giữa hai điểm. Tia", periods: 2 },
-                        { name: "Bài 34. Đoạn thẳng. Độ dài đoạn thẳng", periods: 3 },
-                        { name: "Bài 35. Trung điểm của đoạn thẳng", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 36. Góc", periods: 2 },
-                        { name: "Bài 37. Số đo góc", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VIII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IX. Dữ liệu và xác suất thực nghiệm",
-                    unitName: "Thu thập dữ liệu, biểu đồ và xác suất thực nghiệm",
-                    lessons: [
-                        { name: "Bài 38. Dữ liệu và thu thập dữ liệu", periods: 2 },
-                        { name: "Bài 39. Bảng thống kê và biểu đồ tranh", periods: 3 },
-                        { name: "Bài 40. Biểu đồ cột", periods: 3 },
-                        { name: "Bài 41. Biểu đồ cột kép", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 42. Kết quả có thể và sự kiện trong trò chơi, thí nghiệm", periods: 3 },
-                        { name: "Bài 43. Xác suất thực nghiệm", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương IX", periods: 2 }
-                    ]
-                }
+                { chapter: "Chương I. Tập hợp các số tự nhiên", unitName: "Số tự nhiên và tập hợp các số tự nhiên", lessons: [{ name: "Bài 1. Tập hợp", periods: 1 }, { name: "Bài 2. Cách ghi số tự nhiên", periods: 1 }, { name: "Bài 3. Thứ tự trong tập hợp các số tự nhiên", periods: 1 }, { name: "Bài 4. Phép cộng và phép trừ số tự nhiên", periods: 1 }, { name: "Bài 5. Phép nhân và phép chia số tự nhiên", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 6. Luỹ thừa với số mũ tự nhiên", periods: 2 }, { name: "Bài 7. Thứ tự thực hiện các phép tính", periods: 1 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương I", periods: 2 }] },
+                { chapter: "Chương II. Tính chia hết", unitName: "Quan hệ chia hết, số nguyên tố, ước chung và bội chung", lessons: [{ name: "Bài 8. Quan hệ chia hết và tính chất", periods: 2 }, { name: "Bài 9. Dấu hiệu chia hết", periods: 2 }, { name: "Bài 10. Số nguyên tố", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 11. Ước chung. Ước chung lớn nhất", periods: 3 }, { name: "Bài 12. Bội chung. Bội chung nhỏ nhất", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương II", periods: 2 }] },
+                { chapter: "Chương III. Số nguyên", unitName: "Tập hợp số nguyên và các phép tính", lessons: [{ name: "Bài 13. Tập hợp các số nguyên", periods: 2 }, { name: "Bài 14. Phép cộng và phép trừ số nguyên", periods: 3 }, { name: "Bài 15. Quy tắc dấu ngoặc", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 16. Phép nhân số nguyên", periods: 2 }, { name: "Bài 17. Phép chia hết. Ước và bội của một số nguyên", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương III", periods: 2 }] },
+                { chapter: "Chương IV. Một số hình phẳng trong thực tiễn", unitName: "Tam giác đều, hình vuông, hình chữ nhật và các hình phẳng", lessons: [{ name: "Bài 18. Hình tam giác đều. Hình vuông. Hình lục giác đều", periods: 3 }, { name: "Bài 19. Hình chữ nhật. Hình thoi. Hình bình hành. Hình thang cân", periods: 4 }, { name: "Bài 20. Chu vi và diện tích của một số tứ giác đã học", periods: 4 }, { name: "Luyện tập chung", periods: 2 }, { name: "Bài tập cuối chương IV", periods: 2 }] },
+                { chapter: "Chương V. Tính đối xứng của hình phẳng", unitName: "Hình có trục đối xứng và hình có tâm đối xứng", lessons: [{ name: "Bài 21. Hình có trục đối xứng", periods: 3 }, { name: "Bài 22. Hình có tâm đối xứng", periods: 3 }, { name: "Luyện tập chung", periods: 2 }, { name: "Bài tập cuối chương V", periods: 2 }] },
+                { chapter: "Chương VI. Phân số", unitName: "Khái niệm phân số và các phép tính với phân số", lessons: [{ name: "Bài 23. Mở rộng khái niệm phân số. Phân số bằng nhau", periods: 3 }, { name: "Bài 24. So sánh phân số. Hỗn số dương", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 25. Phép cộng và phép trừ phân số", periods: 3 }, { name: "Bài 26. Phép nhân và phép chia phân số", periods: 3 }, { name: "Bài 27. Hai bài toán về phân số", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VI", periods: 2 }] },
+                { chapter: "Chương VII. Số thập phân", unitName: "Số thập phân và các bài toán về tỉ số phần trăm", lessons: [{ name: "Bài 28. Số thập phân", periods: 2 }, { name: "Bài 29. Tính toán với số thập phân", periods: 3 }, { name: "Bài 30. Làm tròn và ước lượng", periods: 3 }, { name: "Bài 31. Một số bài toán về tỉ số và tỉ số phần trăm", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VII", periods: 2 }] },
+                { chapter: "Chương VIII. Hình học cơ bản", unitName: "Điểm, đường thẳng, đoạn thẳng và góc", lessons: [{ name: "Bài 32. Điểm và đường thẳng", periods: 2 }, { name: "Bài 33. Điểm nằm giữa hai điểm. Tia", periods: 2 }, { name: "Bài 34. Đoạn thẳng. Độ dài đoạn thẳng", periods: 3 }, { name: "Bài 35. Trung điểm của đoạn thẳng", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 36. Góc", periods: 2 }, { name: "Bài 37. Số đo góc", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VIII", periods: 2 }] },
+                { chapter: "Chương IX. Dữ liệu và xác suất thực nghiệm", unitName: "Thu thập dữ liệu, biểu đồ và xác suất thực nghiệm", lessons: [{ name: "Bài 38. Dữ liệu và thu thập dữ liệu", periods: 2 }, { name: "Bài 39. Bảng thống kê và biểu đồ tranh", periods: 3 }, { name: "Bài 40. Biểu đồ cột", periods: 3 }, { name: "Bài 41. Biểu đồ cột kép", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 42. Kết quả có thể và sự kiện trong trò chơi, thí nghiệm", periods: 3 }, { name: "Bài 43. Xác suất thực nghiệm", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương IX", periods: 2 }] }
             ],
             "7": [
-                {
-                    chapter: "Chương I. Số hữu tỉ",
-                    unitName: "Tập hợp các số hữu tỉ và các phép tính",
-                    lessons: [
-                        { name: "Bài 1. Tập hợp Q các số hữu tỉ", periods: 2 },
-                        { name: "Bài 2. Cộng, trừ, nhân, chia số hữu tỉ", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 3. Luỹ thừa với số mũ tự nhiên của một số hữu tỉ", periods: 2 },
-                        { name: "Bài 4. Quy tắc chuyển vế", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương I", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương II. Số thực",
-                    unitName: "Số thập phân vô hạn tuần hoàn, số vô tỉ và căn bậc hai",
-                    lessons: [
-                        { name: "Bài 5. Làm quen với số thập phân vô hạn tuần hoàn", periods: 2 },
-                        { name: "Bài 6. Số vô tỉ. Căn bậc hai số học", periods: 2 },
-                        { name: "Bài 7. Tập hợp các số thực", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương II", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương III. Góc và đường thẳng song song",
-                    unitName: "Góc ở vị trí đặc biệt, đường thẳng song song và định lí",
-                    lessons: [
-                        { name: "Bài 8. Góc ở vị trí đặc biệt. Tia phân giác của một góc", periods: 3 },
-                        { name: "Bài 9. Hai đường thẳng song song và dấu hiệu nhận biết", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 10. Tiên đề Euclid. Tính chất của hai đường thẳng song song", periods: 3 },
-                        { name: "Bài 11. Định lí và chứng minh định lí", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương III", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IV. Tam giác bằng nhau",
-                    unitName: "Tổng các góc trong một tam giác và các trường hợp bằng nhau",
-                    lessons: [
-                        { name: "Bài 12. Tổng các góc trong một tam giác", periods: 2 },
-                        { name: "Bài 13. Hai tam giác bằng nhau. Trường hợp bằng nhau thứ nhất", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 14. Trường hợp bằng nhau thứ hai và thứ ba của tam giác", periods: 3 },
-                        { name: "Bài 15. Các trường hợp bằng nhau của tam giác vuông", periods: 2 },
-                        { name: "Bài 16. Tam giác cân. Đường trung trực của đoạn thẳng", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương IV", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương V. Thu thập và biểu diễn dữ liệu",
-                    unitName: "Thu thập, phân loại và biểu diễn dữ liệu",
-                    lessons: [
-                        { name: "Bài 17. Thu thập và phân loại dữ liệu", periods: 2 },
-                        { name: "Bài 18. Biểu đồ hình quạt tròn", periods: 3 },
-                        { name: "Bài 19. Biểu đồ đoạn thẳng", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương V", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VI. Tỉ lệ thức và đại lượng tỉ lệ",
-                    unitName: "Tỉ lệ thức, tính chất dãy tỉ số bằng nhau và đại lượng tỉ lệ",
-                    lessons: [
-                        { name: "Bài 20. Tỉ lệ thức", periods: 2 },
-                        { name: "Bài 21. Tính chất của dãy tỉ số bằng nhau", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 22. Đại lượng tỉ lệ thuận", periods: 2 },
-                        { name: "Bài 23. Đại lượng tỉ lệ nghịch", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VI", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VII. Biểu thức đại số và đa thức một biến",
-                    unitName: "Biểu thức đại số, đa thức và các phép tính",
-                    lessons: [
-                        { name: "Bài 24. Biểu thức đại số", periods: 2 },
-                        { name: "Bài 25. Đa thức một biến", periods: 3 },
-                        { name: "Bài 26. Phép cộng và phép trừ đa thức một biến", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 27. Phép nhân đa thức một biến", periods: 3 },
-                        { name: "Bài 28. Phép chia đa thức một biến", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VIII. Làm quen với biến cố và xác suất",
-                    unitName: "Biến cố và xác suất của biến cố trong trò chơi đơn giản",
-                    lessons: [
-                        { name: "Bài 29. Làm quen với biến cố", periods: 2 },
-                        { name: "Bài 30. Làm quen với xác suất của biến cố", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VIII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IX. Quan hệ giữa các yếu tố trong tam giác",
-                    unitName: "Quan hệ góc - cạnh, các đường đồng quy trong tam giác",
-                    lessons: [
-                        { name: "Bài 31. Quan hệ giữa góc và cạnh đối diện trong một tam giác", periods: 2 },
-                        { name: "Bài 32. Quan hệ giữa đường vuông góc và đường xiên", periods: 2 },
-                        { name: "Bài 33. Quan hệ giữa ba cạnh của một tam giác", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 34. Sự đồng quy của ba đường trung tuyến, ba đường phân giác", periods: 3 },
-                        { name: "Bài 35. Sự đồng quy của ba đường trung trực, ba đường cao", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương IX", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương X. Một số hình khối trong thực tiễn",
-                    unitName: "Hình hộp chữ nhật, hình lập phương và lăng trụ đứng",
-                    lessons: [
-                        { name: "Bài 36. Hình hộp chữ nhật và hình lập phương", periods: 3 },
-                        { name: "Bài 37. Hình lăng trụ đứng tam giác và lăng trụ đứng tứ giác", periods: 3 },
-                        { name: "Bài tập cuối chương X", periods: 2 }
-                    ]
-                }
+                { chapter: "Chương I. Số hữu tỉ", unitName: "Tập hợp các số hữu tỉ và các phép tính", lessons: [{ name: "Bài 1. Tập hợp Q các số hữu tỉ", periods: 2 }, { name: "Bài 2. Cộng, trừ, nhân, chia số hữu tỉ", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 3. Luỹ thừa với số mũ tự nhiên của một số hữu tỉ", periods: 2 }, { name: "Bài 4. Quy tắc chuyển vế", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương I", periods: 2 }] },
+                { chapter: "Chương II. Số thực", unitName: "Số thập phân vô hạn tuần hoàn, số vô tỉ và căn bậc hai", lessons: [{ name: "Bài 5. Làm quen với số thập phân vô hạn tuần hoàn", periods: 2 }, { name: "Bài 6. Số vô tỉ. Căn bậc hai số học", periods: 2 }, { name: "Bài 7. Tập hợp các số thực", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương II", periods: 2 }] },
+                { chapter: "Chương III. Góc và đường thẳng song song", unitName: "Góc ở vị trí đặc biệt, đường thẳng song song và định lí", lessons: [{ name: "Bài 8. Góc ở vị trí đặc biệt. Tia phân giác của một góc", periods: 3 }, { name: "Bài 9. Hai đường thẳng song song và dấu hiệu nhận biết", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 10. Tiên đề Euclid. Tính chất của hai đường thẳng song song", periods: 3 }, { name: "Bài 11. Định lí và chứng minh định lí", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương III", periods: 2 }] },
+                { chapter: "Chương IV. Tam giác bằng nhau", unitName: "Tổng các góc trong một tam giác và các trường hợp bằng nhau", lessons: [{ name: "Bài 12. Tổng các góc trong một tam giác", periods: 2 }, { name: "Bài 13. Hai tam giác bằng nhau. Trường hợp bằng nhau thứ nhất", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 14. Trường hợp bằng nhau thứ hai và thứ ba của tam giác", periods: 3 }, { name: "Bài 15. Các trường hợp bằng nhau của tam giác vuông", periods: 2 }, { name: "Bài 16. Tam giác cân. Đường trung trực của đoạn thẳng", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương IV", periods: 2 }] },
+                { chapter: "Chương V. Thu thập và biểu diễn dữ liệu", unitName: "Thu thập, phân loại và biểu diễn dữ liệu", lessons: [{ name: "Bài 17. Thu thập và phân loại dữ liệu", periods: 2 }, { name: "Bài 18. Biểu đồ hình quạt tròn", periods: 3 }, { name: "Bài 19. Biểu đồ đoạn thẳng", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương V", periods: 2 }] },
+                { chapter: "Chương VI. Tỉ lệ thức và đại lượng tỉ lệ", unitName: "Tỉ lệ thức, tính chất dãy tỉ số bằng nhau và đại lượng tỉ lệ", lessons: [{ name: "Bài 20. Tỉ lệ thức", periods: 2 }, { name: "Bài 21. Tính chất của dãy tỉ số bằng nhau", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 22. Đại lượng tỉ lệ thuận", periods: 2 }, { name: "Bài 23. Đại lượng tỉ lệ nghịch", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VI", periods: 2 }] },
+                { chapter: "Chương VII. Biểu thức đại số và đa thức một biến", unitName: "Biểu thức đại số, đa thức và các phép tính", lessons: [{ name: "Bài 24. Biểu thức đại số", periods: 2 }, { name: "Bài 25. Đa thức một biến", periods: 3 }, { name: "Bài 26. Phép cộng và phép trừ đa thức một biến", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 27. Phép nhân đa thức một biến", periods: 3 }, { name: "Bài 28. Phép chia đa thức một biến", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VII", periods: 2 }] },
+                { chapter: "Chương VIII. Làm quen với biến cố và xác suất", unitName: "Biến cố và xác suất của biến cố trong trò chơi đơn giản", lessons: [{ name: "Bài 29. Làm quen với biến cố", periods: 2 }, { name: "Bài 30. Làm quen với xác suất của biến cố", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VIII", periods: 2 }] },
+                { chapter: "Chương IX. Quan hệ giữa các yếu tố trong tam giác", unitName: "Quan hệ góc - cạnh, các đường đồng quy trong tam giác", lessons: [{ name: "Bài 31. Quan hệ giữa góc và cạnh đối diện trong một tam giác", periods: 2 }, { name: "Bài 32. Quan hệ giữa đường vuông góc và đường xiên", periods: 2 }, { name: "Bài 33. Quan hệ giữa ba cạnh của một tam giác", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 34. Sự đồng quy của ba đường trung tuyến, ba đường phân giác", periods: 3 }, { name: "Bài 35. Sự đồng quy của ba đường trung trực, ba đường cao", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương IX", periods: 2 }] },
+                { chapter: "Chương X. Một số hình khối trong thực tiễn", unitName: "Hình hộp chữ nhật, hình lập phương và lăng trụ đứng", lessons: [{ name: "Bài 36. Hình hộp chữ nhật và hình lập phương", periods: 3 }, { name: "Bài 37. Hình lăng trụ đứng tam giác và lăng trụ đứng tứ giác", periods: 3 }, { name: "Bài tập cuối chương X", periods: 2 }] }
             ],
             "8": [
-                {
-                    chapter: "Chương I. Đa thức",
-                    unitName: "Đơn thức, đa thức nhiều biến và các phép tính",
-                    lessons: [
-                        { name: "Bài 1. Đơn thức", periods: 2 },
-                        { name: "Bài 2. Đa thức", periods: 2 },
-                        { name: "Bài 3. Phép cộng và phép trừ đa thức", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 4. Phép nhân đa thức", periods: 2 },
-                        { name: "Bài 5. Phép chia đa thức cho đơn thức", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương I", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương II. Hằng đẳng thức đáng nhớ và ứng dụng",
-                    unitName: "Hằng đẳng thức đáng nhớ và phân tích đa thức thành nhân tử",
-                    lessons: [
-                        { name: "Bài 6. Hiệu hai bình phương. Bình phương của một tổng hay hiệu", periods: 3 },
-                        { name: "Bài 7. Lập phương của một tổng. Lập phương của một hiệu", periods: 2 },
-                        { name: "Bài 8. Tổng và hiệu hai lập phương", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 9. Phân tích đa thức thành nhân tử", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương II", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương III. Tứ giác",
-                    unitName: "Tứ giác, hình thang cân, hình bình hành, hình chữ nhật",
-                    lessons: [
-                        { name: "Bài 10. Tứ giác", periods: 2 },
-                        { name: "Bài 11. Hình thang cân", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 12. Hình bình hành", periods: 2 },
-                        { name: "Bài 13. Hình chữ nhật", periods: 2 },
-                        { name: "Bài 14. Hình thoi và hình vuông", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương III", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IV. Định lí Thalès",
-                    unitName: "Định lí Thalès trong tam giác và ứng dụng",
-                    lessons: [
-                        { name: "Bài 15. Định lí Thalès trong tam giác", periods: 3 },
-                        { name: "Bài 16. Đường trung bình của tam giác", periods: 2 },
-                        { name: "Bài 17. Tính chất đường phân giác của tam giác", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương IV", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương V. Dữ liệu và biểu đồ",
-                    unitName: "Thu thập, biểu diễn và phân tích dữ liệu thống kê",
-                    lessons: [
-                        { name: "Bài 18. Thu thập và phân loại dữ liệu", periods: 2 },
-                        { name: "Bài 19. Biểu diễn dữ liệu bằng bảng, biểu đồ", periods: 3 },
-                        { name: "Bài 20. Phân tích số liệu thống kê dựa vào biểu đồ", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương V", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VI. Phân thức đại số",
-                    unitName: "Phân thức đại số và các phép tính",
-                    lessons: [
-                        { name: "Bài 21. Phân thức đại số", periods: 2 },
-                        { name: "Bài 22. Tính chất cơ bản của phân thức đại số", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 23. Phép cộng và phép trừ phân thức đại số", periods: 3 },
-                        { name: "Bài 24. Phép nhân và phép chia phân thức đại số", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VI", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VII. Phương trình bậc nhất và hàm số bậc nhất",
-                    unitName: "Phương trình bậc nhất một ẩn và hàm số bậc nhất",
-                    lessons: [
-                        { name: "Bài 25. Phương trình bậc nhất một ẩn", periods: 3 },
-                        { name: "Bài 26. Giải bài toán bằng cách lập phương trình", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 27. Khái niệm hàm số và đồ thị của hàm số", periods: 3 },
-                        { name: "Bài 28. Hàm số bậc nhất và đồ thị của hàm số bậc nhất", periods: 3 },
-                        { name: "Bài 29. Hệ số góc của đường thẳng", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VIII. Mở đầu về tính xác suất của biến cố",
-                    unitName: "Xác suất thực nghiệm và xác suất lý thuyết",
-                    lessons: [
-                        { name: "Bài 30. Kết quả có thể và kết quả thuận lợi", periods: 2 },
-                        { name: "Bài 31. Cách tính xác suất của biến cố bằng tỉ số", periods: 3 },
-                        { name: "Bài 32. Mối liên hệ giữa xác suất thực nghiệm với xác suất", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VIII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IX. Tam giác đồng dạng",
-                    unitName: "Định lí Pythagore và các trường hợp đồng dạng của tam giác",
-                    lessons: [
-                        { name: "Bài 33. Hai tam giác đồng dạng", periods: 3 },
-                        { name: "Bài 34. Ba trường hợp đồng dạng của hai tam giác", periods: 4 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 35. Định lí Pythagore và ứng dụng", periods: 3 },
-                        { name: "Bài 36. Các trường hợp đồng dạng của tam giác vuông", periods: 3 },
-                        { name: "Bài 37. Hình đồng dạng", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương IX", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương X. Một số hình khối trong thực tiễn",
-                    unitName: "Hình chóp tam giác đều và hình chóp tứ giác đều",
-                    lessons: [
-                        { name: "Bài 38. Hình chóp tam giác đều", periods: 3 },
-                        { name: "Bài 39. Hình chóp tứ giác đều", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương X", periods: 2 }
-                    ]
-                }
+                { chapter: "Chương I. Đa thức", unitName: "Đơn thức, đa thức nhiều biến và các phép tính", lessons: [{ name: "Bài 1. Đơn thức", periods: 2 }, { name: "Bài 2. Đa thức", periods: 2 }, { name: "Bài 3. Phép cộng và phép trừ đa thức", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 4. Phép nhân đa thức", periods: 2 }, { name: "Bài 5. Phép chia đa thức cho đơn thức", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương I", periods: 2 }] },
+                { chapter: "Chương II. Hằng đẳng thức đáng nhớ và ứng dụng", unitName: "Hằng đẳng thức đáng nhớ và phân tích đa thức thành nhân tử", lessons: [{ name: "Bài 6. Hiệu hai bình phương. Bình phương của một tổng hay hiệu", periods: 3 }, { name: "Bài 7. Lập phương của một tổng. Lập phương của một hiệu", periods: 2 }, { name: "Bài 8. Tổng và hiệu hai lập phương", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 9. Phân tích đa thức thành nhân tử", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương II", periods: 2 }] },
+                { chapter: "Chương III. Tứ giác", unitName: "Tứ giác, hình thang cân, hình bình hành, hình chữ nhật", lessons: [{ name: "Bài 10. Tứ giác", periods: 2 }, { name: "Bài 11. Hình thang cân", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 12. Hình bình hành", periods: 2 }, { name: "Bài 13. Hình chữ nhật", periods: 2 }, { name: "Bài 14. Hình thoi và hình vuông", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương III", periods: 2 }] },
+                { chapter: "Chương IV. Định lí Thalès", unitName: "Định lí Thalès trong tam giác và ứng dụng", lessons: [{ name: "Bài 15. Định lí Thalès trong tam giác", periods: 3 }, { name: "Bài 16. Đường trung bình của tam giác", periods: 2 }, { name: "Bài 17. Tính chất đường phân giác của tam giác", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương IV", periods: 2 }] },
+                { chapter: "Chương V. Dữ liệu và biểu đồ", unitName: "Thu thập, biểu diễn và phân tích dữ liệu thống kê", lessons: [{ name: "Bài 18. Thu thập và phân loại dữ liệu", periods: 2 }, { name: "Bài 19. Biểu diễn dữ liệu bằng bảng, biểu đồ", periods: 3 }, { name: "Bài 20. Phân tích số liệu thống kê dựa vào biểu đồ", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương V", periods: 2 }] },
+                { chapter: "Chương VI. Phân thức đại số", unitName: "Phân thức đại số và các phép tính", lessons: [{ name: "Bài 21. Phân thức đại số", periods: 2 }, { name: "Bài 22. Tính chất cơ bản của phân thức đại số", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 23. Phép cộng và phép trừ phân thức đại số", periods: 3 }, { name: "Bài 24. Phép nhân và phép chia phân thức đại số", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VI", periods: 2 }] },
+                { chapter: "Chương VII. Phương trình bậc nhất và hàm số bậc nhất", unitName: "Phương trình bậc nhất một ẩn và hàm số bậc nhất", lessons: [{ name: "Bài 25. Phương trình bậc nhất một ẩn", periods: 3 }, { name: "Bài 26. Giải bài toán bằng cách lập phương trình", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 27. Khái niệm hàm số và đồ thị của hàm số", periods: 3 }, { name: "Bài 28. Hàm số bậc nhất và đồ thị của hàm số bậc nhất", periods: 3 }, { name: "Bài 29. Hệ số góc của đường thẳng", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VII", periods: 2 }] },
+                { chapter: "Chương VIII. Mở đầu về tính xác suất của biến cố", unitName: "Xác suất thực nghiệm và xác suất lý thuyết", lessons: [{ name: "Bài 30. Kết quả có thể và kết quả thuận lợi", periods: 2 }, { name: "Bài 31. Cách tính xác suất của biến cố bằng tỉ số", periods: 3 }, { name: "Bài 32. Mối liên hệ giữa xác suất thực nghiệm với xác suất", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương VIII", periods: 2 }] },
+                { chapter: "Chương IX. Tam giác đồng dạng", unitName: "Định lí Pythagore và các trường hợp đồng dạng của tam giác", lessons: [{ name: "Bài 33. Hai tam giác đồng dạng", periods: 3 }, { name: "Bài 34. Ba trường hợp đồng dạng của hai tam giác", periods: 4 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài 35. Định lí Pythagore và ứng dụng", periods: 3 }, { name: "Bài 36. Các trường hợp đồng dạng của tam giác vuông", periods: 3 }, { name: "Bài 37. Hình đồng dạng", periods: 2 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương IX", periods: 2 }] },
+                { chapter: "Chương X. Một số hình khối trong thực tiễn", unitName: "Hình chóp tam giác đều và hình chóp tứ giác đều", lessons: [{ name: "Bài 38. Hình chóp tam giác đều", periods: 3 }, { name: "Bài 39. Hình chóp tứ giác đều", periods: 3 }, { name: "Luyện tập chung", periods: 1 }, { name: "Bài tập cuối chương X", periods: 2 }] }
             ],
             "9": [
-                {
-                    chapter: "Chương I. Phương trình và hệ hai phương trình bậc nhất hai ẩn",
-                    unitName: "Phương trình và hệ hai phương trình bậc nhất hai ẩn",
-                    lessons: [
-                        { name: "Bài 1. Khái niệm phương trình và hệ hai phương trình bậc nhất hai ẩn", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 2. Giải hệ hai phương trình bậc nhất hai ẩn", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 3. Giải bài toán bằng cách lập hệ phương trình", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương I", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương II. Phương trình và bất phương trình bậc nhất một ẩn",
-                    unitName: "Phương trình quy về phương trình bậc nhất và bất phương trình một ẩn",
-                    lessons: [
-                        { name: "Bài 4. Phương trình quy về phương trình bậc nhất một ẩn", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 5. Bất đẳng thức và tính chất", periods: 2 },
-                        { name: "Bài 6. Bất phương trình bậc nhất một ẩn", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương II", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương III. Căn bậc hai và căn bậc ba",
-                    unitName: "Căn bậc hai, căn thức bậc hai và các phép biến đổi đơn giản",
-                    lessons: [
-                        { name: "Bài 7. Căn bậc hai và căn thức bậc hai", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 8. Khai căn bậc hai với phép nhân và phép chia", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 9. Biến đổi đơn giản và rút gọn biểu thức chứa căn thức bậc hai", periods: 4 },
-                        { name: "Bài 10. Căn bậc ba và căn thức bậc ba", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương III", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IV. Hệ thức lượng trong tam giác vuông",
-                    unitName: "Một số hệ thức về cạnh, góc trong tam giác vuông và ứng dụng",
-                    lessons: [
-                        { name: "Bài 11. Tỉ số lượng giác của góc nhọn", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 12. Một số hệ thức giữa cạnh và góc trong tam giác vuông", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương IV", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương V. Đường tròn",
-                    unitName: "Đường tròn, tiếp tuyến, góc với đường tròn và tứ giác nội tiếp",
-                    lessons: [
-                        { name: "Bài 13. Mở đầu về đường tròn", periods: 2 },
-                        { name: "Bài 14. Cung và dây của một đường tròn", periods: 2 },
-                        { name: "Bài 15. Độ dài của cung tròn. Diện tích hình quạt tròn và hình vành khuyên", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 16. Vị trí tương đối của đường thẳng và đường tròn", periods: 3 },
-                        { name: "Bài 17. Vị trí tương đối của hai đường tròn", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương V", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VI. Hàm số y = ax^2 và phương trình bậc hai một ẩn",
-                    unitName: "Hàm số y = ax^2, phương trình bậc hai và định lí Viète",
-                    lessons: [
-                        { name: "Bài 18. Hàm số y = ax^2 (a khác 0)", periods: 2 },
-                        { name: "Bài 19. Phương trình bậc hai một ẩn", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 20. Định lí Viète và ứng dụng", periods: 3 },
-                        { name: "Bài 21. Giải bài toán bằng cách lập phương trình", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VI", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VII. Tần số và tần số tương đối",
-                    unitName: "Bảng tần số, tần số tương đối và biểu đồ",
-                    lessons: [
-                        { name: "Bài 22. Bảng tần số và biểu đồ tần số", periods: 2 },
-                        { name: "Bài 23. Bảng tần số tương đối và biểu đồ tần số tương đối", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 24. Bảng tần số, tần số tương đối ghép nhóm và biểu đồ", periods: 3 },
-                        { name: "Bài tập cuối chương VII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương VIII. Xác suất của biến cố trong một số mô hình",
-                    unitName: "Phép thử ngẫu nhiên và xác suất của biến cố",
-                    lessons: [
-                        { name: "Bài 25. Phép thử ngẫu nhiên và không gian mẫu", periods: 2 },
-                        { name: "Bài 26. Xác suất của biến cố liên quan tới phép thử", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương VIII", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương IX. Đường tròn ngoại tiếp và đường tròn nội tiếp",
-                    unitName: "Góc nội tiếp, đường tròn ngoại tiếp, nội tiếp và đa giác đều",
-                    lessons: [
-                        { name: "Bài 27. Góc nội tiếp", periods: 3 },
-                        { name: "Bài 28. Đường tròn ngoại tiếp và đường tròn nội tiếp của một tam giác", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài 29. Tứ giác nội tiếp", periods: 3 },
-                        { name: "Bài 30. Đa giác đều", periods: 3 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương IX", periods: 2 }
-                    ]
-                },
-                {
-                    chapter: "Chương X. Một số hình khối trong thực tiễn",
-                    unitName: "Hình trụ, hình nón và hình cầu",
-                    lessons: [
-                        { name: "Bài 31. Hình trụ và hình nón", periods: 3 },
-                        { name: "Bài 32. Hình cầu", periods: 2 },
-                        { name: "Luyện tập chung", periods: 1 },
-                        { name: "Bài tập cuối chương X", periods: 2 }
-                    ]
-                }
+                { chapter: "Chương I. Phương trình và hệ hai phương trình bậc nhất hai ẩn", unitName: "Phương trình và hệ hai phương trình bậc nhất hai ẩn", lessons: [{ name: "Bài 1. Khái niệm phương trình và hệ hai phương trình bậc nhất hai ẩn", periods: 2 }, { name: "Bài 2. Giải hệ hai phương trình bậc nhất hai ẩn", periods: 3 }, { name: "Bài 3. Giải bài toán bằng cách lập hệ phương trình", periods: 2 }, { name: "Bài tập cuối chương I", periods: 2 }] },
+                { chapter: "Chương II. Phương trình và bất phương trình bậc nhất một ẩn", unitName: "Phương trình quy về phương trình bậc nhất và bất phương trình một ẩn", lessons: [{ name: "Bài 4. Phương trình quy về phương trình bậc nhất một ẩn", periods: 2 }, { name: "Bài 5. Bất đẳng thức và tính chất", periods: 2 }, { name: "Bài 6. Bất phương trình bậc nhất một ẩn", periods: 3 }, { name: "Bài tập cuối chương II", periods: 2 }] },
+                { chapter: "Chương III. Căn bậc hai và căn bậc ba", unitName: "Căn bậc hai, căn thức bậc hai và các phép biến đổi đơn giản", lessons: [{ name: "Bài 7. Căn bậc hai và căn thức bậc hai", periods: 3 }, { name: "Bài 8. Khai căn bậc hai với phép nhân và phép chia", periods: 3 }, { name: "Bài 9. Biến đổi đơn giản và rút gọn biểu thức chứa căn thức bậc hai", periods: 4 }, { name: "Bài 10. Căn bậc ba và căn thức bậc ba", periods: 2 }, { name: "Bài tập cuối chương III", periods: 2 }] },
+                { chapter: "Chương IV. Hệ thức lượng trong tam giác vuông", unitName: "Một số hệ thức về cạnh, góc trong tam giác vuông và ứng dụng", lessons: [{ name: "Bài 11. Tỉ số lượng giác của góc nhọn", periods: 3 }, { name: "Bài 12. Một số hệ thức giữa cạnh và góc trong tam giác vuông", periods: 3 }, { name: "Bài tập cuối chương IV", periods: 2 }] },
+                { chapter: "Chương V. Đường tròn", unitName: "Đường tròn, tiếp tuyến, góc với đường tròn và tứ giác nội tiếp", lessons: [{ name: "Bài 13. Mở đầu về đường tròn", periods: 2 }, { name: "Bài 14. Cung và dây của một đường tròn", periods: 2 }, { name: "Bài 15. Độ dài của cung tròn. Diện tích hình quạt tròn và hình vành khuyên", periods: 2 }, { name: "Bài 16. Vị trí tương đối của đường thẳng và đường tròn", periods: 3 }, { name: "Bài 17. Vị trí tương đối của hai đường tròn", periods: 3 }, { name: "Bài tập cuối chương V", periods: 2 }] },
+                { chapter: "Chương VI. Hàm số y = ax^2 và phương trình bậc hai một ẩn", unitName: "Hàm số y = ax^2, phương trình bậc hai và định lí Viète", lessons: [{ name: "Bài 18. Hàm số y = ax^2 (a khác 0)", periods: 2 }, { name: "Bài 19. Phương trình bậc hai một ẩn", periods: 3 }, { name: "Bài 20. Định lí Viète và ứng dụng", periods: 3 }, { name: "Bài 21. Giải bài toán bằng cách lập phương trình", periods: 3 }, { name: "Bài tập cuối chương VI", periods: 2 }] },
+                { chapter: "Chương VII. Tần số và tần số tương đối", unitName: "Bảng tần số, tần số tương đối và biểu đồ", lessons: [{ name: "Bài 22. Bảng tần số và biểu đồ tần số", periods: 2 }, { name: "Bài 23. Bảng tần số tương đối và biểu đồ tần số tương đối", periods: 2 }, { name: "Bài 24. Bảng tần số, tần số tương đối ghép nhóm và biểu đồ", periods: 3 }, { name: "Bài tập cuối chương VII", periods: 2 }] },
+                { chapter: "Chương VIII. Xác suất của biến cố trong một số mô hình", unitName: "Phép thử ngẫu nhiên và xác suất của biến cố", lessons: [{ name: "Bài 25. Phép thử ngẫu nhiên và không gian mẫu", periods: 2 }, { name: "Bài 26. Xác suất của biến cố liên quan tới phép thử", periods: 3 }, { name: "Bài tập cuối chương VIII", periods: 2 }] },
+                { chapter: "Chương IX. Đường tròn ngoại tiếp và đường tròn nội tiếp", unitName: "Góc nội tiếp, đường tròn ngoại tiếp, nội tiếp và đa giác đều", lessons: [{ name: "Bài 27. Góc nội tiếp", periods: 3 }, { name: "Bài 28. Đường tròn ngoại tiếp và đường tròn nội tiếp của một tam giác", periods: 3 }, { name: "Bài 29. Tứ giác nội tiếp", periods: 3 }, { name: "Bài 30. Đa giác đều", periods: 3 }, { name: "Bài tập cuối chương IX", periods: 2 }] },
+                { chapter: "Chương X. Một số hình khối trong thực tiễn", unitName: "Hình trụ, hình nón và hình cầu", lessons: [{ name: "Bài 31. Hình trụ và hình nón", periods: 3 }, { name: "Bài 32. Hình cầu", periods: 2 }, { name: "Bài tập cuối chương X", periods: 2 }] }
             ]
         };
 
-        let currentGrade = "7";
+        const MatrixEngine = {
+            roundScore(val) {
+                if (!val || val <= 0) return 0;
+                return Math.round(val * 4) / 4;
+            },
+            
+            formatPts(val) {
+                if (!val || val <= 0) return '';
+                let rounded = this.roundScore(val);
+                return rounded.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+            },
 
-        window.onload = function() {
-            loadGradeData();
+            distributeSpreadCounts(totalCount, units, offset = 0) {
+                let n = units.length;
+                let resultMap = {};
+                units.forEach(u => resultMap[u.cIdx] = 0);
+                if (totalCount <= 0 || n === 0) return resultMap;
+
+                let sumP = units.reduce((s, u) => s + u.periods, 0) || 1;
+                let items = units.map((u, i) => {
+                    let exact = (u.periods / sumP) * totalCount;
+                    let floorVal = Math.floor(exact);
+                    return { unit: u, floor: floorVal, rem: exact - floorVal, originalIndex: i };
+                });
+
+                let allocated = items.reduce((s, x) => s + x.floor, 0);
+                let diff = totalCount - allocated;
+
+                items.sort((a, b) => (Math.abs(b.rem - a.rem) > 0.0001) ? (b.rem - a.rem) : (((a.originalIndex + offset) % n) - ((b.originalIndex + offset) % n)));
+
+                items.forEach(x => x.count = x.floor);
+                for (let i = 0; i < diff; i++) {
+                    items[(i + offset) % items.length].count += 1;
+                }
+
+                items.forEach(x => resultMap[x.unit.cIdx] = x.count);
+                return resultMap;
+            }
         };
 
-        function loadGradeData() {
-            currentGrade = document.getElementById('gradeSelect').value;
-            document.getElementById('docGradeHeader').innerText = currentGrade;
-            document.getElementById('docGradeTitle').innerText = currentGrade;
-            document.getElementById('docGradeSpecTitle').innerText = currentGrade;
-            
-            const container = document.getElementById('lessonTreeContainer');
-            container.innerHTML = '';
+        const AppController = {
+            currentGrade: "9",
 
-            const chapters = MATH_CHAPTERS[currentGrade] || MATH_CHAPTERS["7"];
+            init() {
+                this.onGradeChange();
+            },
 
-            chapters.forEach((chap, cIdx) => {
-                let totalChapPeriods = chap.lessons.reduce((s, l) => s + l.periods, 0);
+            onGradeChange() {
+                this.currentGrade = document.getElementById('gradeSelect').value;
+                document.getElementById('docGradeHeader').innerText = this.currentGrade;
+                document.getElementById('docGradeTitle').innerText = this.currentGrade;
+                document.getElementById('docGradeSpecTitle').innerText = this.currentGrade;
                 
-                let chapHtml = `
-                    <div class="border rounded bg-white p-2.5 shadow-sm">
-                        <div class="font-bold text-indigo-950 flex justify-between items-center cursor-pointer border-b pb-1.5 mb-1.5" onclick="toggleChapter('${cIdx}')">
-                            <span class="text-indigo-900"><i class="fa-solid fa-folder-open text-amber-500 mr-1"></i> ${chap.chapter}</span>
-                            <div class="flex items-center space-x-1.5">
-                                <span class="text-[10px] bg-indigo-100 text-indigo-900 font-semibold px-1.5 py-0.5 rounded">${totalChapPeriods} tiết</span>
-                                <button onclick="event.stopPropagation(); selectChapter('${cIdx}', true)" class="text-[10px] bg-indigo-200 text-indigo-900 font-bold px-1.5 py-0.5 rounded hover:bg-indigo-300">Chọn</button>
-                                <button onclick="event.stopPropagation(); selectChapter('${cIdx}', false)" class="text-[10px] bg-slate-200 text-slate-700 font-bold px-1.5 py-0.5 rounded hover:bg-slate-300">Bỏ</button>
+                this.renderLessonTree();
+                this.render();
+            },
+
+            renderLessonTree() {
+                const container = document.getElementById('lessonTreeContainer');
+                container.innerHTML = '';
+                const chapters = MATH_CHAPTERS[this.currentGrade] || MATH_CHAPTERS["9"];
+
+                chapters.forEach((chap, cIdx) => {
+                    let totalChapPeriods = chap.lessons.reduce((s, l) => s + l.periods, 0);
+                    let chapHtml = `
+                        <div class="border rounded bg-white p-2.5 shadow-sm">
+                            <div class="font-bold text-indigo-950 flex justify-between items-center border-b pb-1.5 mb-1.5">
+                                <span class="text-indigo-900"><i class="fa-solid fa-folder-open text-amber-500 mr-1"></i> ${chap.chapter}</span>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-[10px] bg-indigo-100 text-indigo-900 font-semibold px-1.5 py-0.5 rounded mr-1">${totalChapPeriods} tiết</span>
+                                    <button onclick="AppController.selectChapter('${cIdx}', true)" class="text-[10px] bg-indigo-200 text-indigo-900 font-bold px-1.5 py-0.5 rounded hover:bg-indigo-300">Chọn</button>
+                                    <button onclick="AppController.selectChapter('${cIdx}', false)" class="text-[10px] bg-slate-200 text-slate-700 font-bold px-1.5 py-0.5 rounded hover:bg-slate-300">Bỏ</button>
+                                </div>
                             </div>
-                        </div>
-                        <div id="chap_content_${cIdx}" class="pl-1 space-y-1">
-                `;
-
-                chap.lessons.forEach((les, lIdx) => {
-                    const id = `les_${cIdx}_${lIdx}`;
-                    chapHtml += `
-                        <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="${id}" value="${cIdx}_${lIdx}" checked class="lesson-checkbox chap-${cIdx}-cb rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer" onchange="generateMatrixAndSpec()">
-                            <label for="${id}" class="text-slate-800 font-medium cursor-pointer flex-1">
-                                ${les.name} <span class="text-indigo-600 font-bold">(${les.periods} tiết)</span>
-                            </label>
-                        </div>
+                            <div class="pl-1 space-y-1">
                     `;
+
+                    chap.lessons.forEach((les, lIdx) => {
+                        const id = `les_${cIdx}_${lIdx}`;
+                        chapHtml += `
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" id="${id}" value="${cIdx}_${lIdx}" checked class="lesson-checkbox chap-${cIdx}-cb rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer" onchange="AppController.render()">
+                                <label for="${id}" class="text-slate-800 font-medium cursor-pointer flex-1">
+                                    ${les.name} <span class="text-indigo-600 font-bold">(${les.periods} tiết)</span>
+                                </label>
+                            </div>
+                        `;
+                    });
+
+                    chapHtml += `</div></div>`;
+                    container.innerHTML += chapHtml;
                 });
+            },
 
-                chapHtml += `</div></div>`;
-                container.innerHTML += chapHtml;
-            });
+            selectChapter(cIdx, status) {
+                document.querySelectorAll(`.chap-${cIdx}-cb`).forEach(cb => cb.checked = status);
+                this.render();
+            },
 
-            generateMatrixAndSpec();
-        }
+            selectAllLessons(status) {
+                document.querySelectorAll('.lesson-checkbox').forEach(cb => cb.checked = status);
+                this.render();
+            },
 
-        function toggleChapter(cIdx) {
-            document.getElementById(`chap_content_${cIdx}`).classList.toggle('hidden');
-        }
+            validateInputs() {
+                let rNB = parseInt(document.getElementById('rateNB').value) || 0;
+                let rTH = parseInt(document.getElementById('rateTH').value) || 0;
+                let rVD = parseInt(document.getElementById('rateVD').value) || 0;
+                let sumRate = rNB + rTH + rVD;
 
-        function selectChapter(cIdx, status) {
-            const checkboxes = document.querySelectorAll(`.chap-${cIdx}-cb`);
-            checkboxes.forEach(cb => cb.checked = status);
-            generateMatrixAndSpec();
-        }
+                let numNLC = parseInt(document.getElementById('numNLC').value) || 0;
+                let scoreNLC = parseFloat(document.getElementById('scoreNLC').value) || 0;
+                let numDS = parseInt(document.getElementById('numDS').value) || 0;
+                let scoreDS = parseFloat(document.getElementById('scoreDS').value) || 0;
+                let numTLN = parseInt(document.getElementById('numTLN').value) || 0;
+                let scoreTLN = parseFloat(document.getElementById('scoreTLN').value) || 0;
+                let scoreTL = parseFloat(document.getElementById('scoreTL').value) || 0;
 
-        function selectAll(status) {
-            const checkboxes = document.querySelectorAll('.lesson-checkbox');
-            checkboxes.forEach(cb => cb.checked = status);
-            generateMatrixAndSpec();
-        }
+                let totalScore = (numNLC * scoreNLC) + (numDS * scoreDS) + (numTLN * scoreTLN) + scoreTL;
 
-        function validateRates() {
-            const nb = parseInt(document.getElementById('rateNB').value) || 0;
-            const th = parseInt(document.getElementById('rateTH').value) || 0;
-            const vd = parseInt(document.getElementById('rateVD').value) || 0;
-            
-            const warning = document.getElementById('rateWarning');
-            if (nb + th + vd !== 100) {
-                warning.classList.remove('hidden');
-            } else {
-                warning.classList.add('hidden');
-                generateMatrixAndSpec();
-            }
-        }
+                const alertBox = document.getElementById('validationAlert');
+                const alertText = document.getElementById('validationAlertText');
+                const badgeBox = document.getElementById('totalScoreBadge');
 
-        function roundToStandardScore(val) {
-            if (!val || val <= 0) return 0;
-            return Math.round(val * 4) / 4;
-        }
+                badgeBox.innerText = `Tổng điểm: ${totalScore.toFixed(1)} / 10.0 đ`;
 
-        function formatCellContent(qCount, pts) {
-            if (!qCount || qCount === 0 || !pts || pts === 0) return '';
-            let standardizedPts = roundToStandardScore(pts);
-            let ptsStr = standardizedPts.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
-            return `<div class="cell-q">${qCount}</div><div class="cell-pts">(${ptsStr}đ)</div>`;
-        }
-
-        function distributeSpreadCounts(totalCount, units, offset = 0) {
-            let n = units.length;
-            let resultMap = {};
-            units.forEach(u => resultMap[u.cIdx] = 0);
-            if (totalCount <= 0 || n === 0) return resultMap;
-
-            let sumP = 0;
-            units.forEach(u => sumP += u.periods);
-            if (sumP === 0) sumP = 1;
-
-            let items = units.map((u, i) => {
-                let exact = (u.periods / sumP) * totalCount;
-                let floorVal = Math.floor(exact);
-                return { unit: u, floor: floorVal, rem: exact - floorVal, originalIndex: i };
-            });
-
-            let allocated = items.reduce((s, x) => s + x.floor, 0);
-            let diff = totalCount - allocated;
-
-            items.sort((a, b) => {
-                if (Math.abs(b.rem - a.rem) > 0.0001) return b.rem - a.rem;
-                return ((a.originalIndex + offset) % n) - ((b.originalIndex + offset) % n);
-            });
-
-            items.forEach(x => x.count = x.floor);
-            for (let i = 0; i < diff; i++) {
-                let targetIdx = (i + offset) % items.length;
-                items[targetIdx].count += 1;
-            }
-
-            items.forEach(x => {
-                resultMap[x.unit.cIdx] = x.count;
-            });
-            return resultMap;
-        }
-
-        let globalEssayAllocation = [];
-
-        function generateMatrixAndSpec() {
-            document.getElementById('docSchool').innerText = document.getElementById('schoolName').value.toUpperCase();
-            document.getElementById('docExamType').innerText = document.getElementById('examType').value.toUpperCase();
-            document.getElementById('docExamTypeTitle').innerText = document.getElementById('examType').value.toUpperCase();
-            document.getElementById('docExamTypeSpecTitle').innerText = document.getElementById('examType').value.toUpperCase();
-            document.getElementById('docYear').innerText = document.getElementById('schoolYear').value;
-
-            const chapters = MATH_CHAPTERS[currentGrade] || MATH_CHAPTERS["7"];
-            const checkboxes = document.querySelectorAll('.lesson-checkbox:checked');
-            
-            let chapterDataMap = {};
-            let totalPeriods = 0;
-
-            checkboxes.forEach(cb => {
-                const [cIdx, lIdx] = cb.value.split('_').map(Number);
-                const chap = chapters[cIdx];
-                const les = chap.lessons[lIdx];
-
-                if (!chapterDataMap[cIdx]) {
-                    chapterDataMap[cIdx] = {
-                        cIdx: cIdx,
-                        chapter: chap.chapter,
-                        unitName: chap.unitName || chap.chapter,
-                        periods: 0,
-                        lessons: []
-                    };
-                }
-                chapterDataMap[cIdx].periods += les.periods;
-                chapterDataMap[cIdx].lessons.push(les);
-                totalPeriods += les.periods;
-            });
-
-            let aggregatedUnits = [];
-            for (const cIdx in chapterDataMap) {
-                aggregatedUnits.push(chapterDataMap[cIdx]);
-            }
-
-            if (aggregatedUnits.length === 0 || totalPeriods === 0) {
-                document.getElementById('matrixTableBody').innerHTML = `<tr><td colspan="19" class="text-center py-4 text-slate-500 font-medium">Vui lòng chọn ít nhất một bài học để tạo ma trận.</td></tr>`;
-                document.getElementById('specTableBody').innerHTML = `<tr><td colspan="16" class="text-center py-4 text-slate-500 font-medium">Vui lòng chọn ít nhất một bài học để tạo bản đặc tả.</td></tr>`;
-                return;
-            }
-
-            let numNLC = parseInt(document.getElementById('numNLC').value) || 4;
-            let scoreNLC = parseFloat(document.getElementById('scoreNLC').value) || 0.25;
-
-            let numDS = parseInt(document.getElementById('numDS').value) || 1;
-            let scoreDS = parseFloat(document.getElementById('scoreDS').value) || 1.0;
-
-            let numTLN = parseInt(document.getElementById('numTLN').value) || 2;
-            let scoreTLN = parseFloat(document.getElementById('scoreTLN').value) || 0.5;
-
-            let numTL = parseInt(document.getElementById('numTL').value) || 5;
-            let scoreTL = parseFloat(document.getElementById('scoreTL').value) || 7.0;
-
-            let rateNB = (parseInt(document.getElementById('rateNB').value) || 40) / 100;
-            let rateTH = (parseInt(document.getElementById('rateTH').value) || 40) / 100;
-            let rateVD = (parseInt(document.getElementById('rateVD').value) || 20) / 100;
-
-            let nlcNB_count = Math.round(numNLC * rateNB);
-            let nlcTH_count = Math.round(numNLC * rateTH);
-            let nlcVD_count = numNLC - nlcNB_count - nlcTH_count;
-            if (nlcVD_count < 0) nlcVD_count = 0;
-
-            let nlcNB_map = distributeSpreadCounts(nlcNB_count, aggregatedUnits, 0);
-            let nlcTH_map = distributeSpreadCounts(nlcTH_count, aggregatedUnits, 1);
-            let nlcVD_map = distributeSpreadCounts(nlcVD_count, aggregatedUnits, 2);
-
-            let maxPeriodsIdx = 0;
-            let maxP = -1;
-            aggregatedUnits.forEach((u, i) => {
-                if (u.periods > maxP) {
-                    maxP = u.periods;
-                    maxPeriodsIdx = i;
-                }
-            });
-            let dsMap = {};
-            aggregatedUnits.forEach(u => dsMap[u.cIdx] = 0);
-            if (numDS > 0 && aggregatedUnits.length > 0) {
-                let targetIdx = (maxPeriodsIdx + 2) % aggregatedUnits.length;
-                dsMap[aggregatedUnits[targetIdx].cIdx] = numDS;
-            }
-
-            let tlnTH_count = Math.round(numTLN * 0.5);
-            let tlnVD_count = numTLN - tlnTH_count;
-            let tlnTH_map = distributeSpreadCounts(tlnTH_count, aggregatedUnits, 3);
-            let tlnVD_map = distributeSpreadCounts(tlnVD_count, aggregatedUnits, 4);
-
-            // PHÂN BỔ ĐÚNG SỐ LƯỢNG BÀI TỰ LUẬN (numTL) RẢI ĐỀU CÁC CHƯƠng & MỨC ĐỘ
-            let essayUnitsMap = distributeSpreadCounts(numTL, aggregatedUnits, 5);
-            globalEssayAllocation = [];
-            let essayIndexCounter = 1;
-
-            aggregatedUnits.forEach(unit => {
-                unit.essayList = [];
-                let countForUnit = essayUnitsMap[unit.cIdx] || 0;
-                let unitScoreTotal = (unit.periods / totalPeriods) * scoreTL;
-                
-                for(let k=0; k < countForUnit; k++) {
-                    let lvl = "Hiểu";
-                    let pVal = unitScoreTotal / countForUnit;
-                    if (k === 0 && rateNB > 0) lvl = "Biết";
-                    else if (k === countForUnit - 1 && rateVD > 0) lvl = "Vận dụng";
-                    
-                    let essayObj = {
-                        no: essayIndexCounter++,
-                        cIdx: unit.cIdx,
-                        level: lvl,
-                        pts: roundToStandardScore(pVal > 0 ? pVal : 1.0)
-                    };
-                    unit.essayList.push(essayObj);
-                    globalEssayAllocation.push(essayObj);
-                }
-            });
-
-            aggregatedUnits.forEach((unit, idx) => {
-                unit.nlcNB = nlcNB_map[unit.cIdx] || 0;
-                unit.nlcTH = nlcTH_map[unit.cIdx] || 0;
-                unit.nlcVD = nlcVD_map[unit.cIdx] || 0;
-
-                unit.ptsNLC_NB = roundToStandardScore(unit.nlcNB * scoreNLC);
-                unit.ptsNLC_TH = roundToStandardScore(unit.nlcTH * scoreNLC);
-                unit.ptsNLC_VD = roundToStandardScore(unit.nlcVD * scoreNLC);
-
-                unit.dsVD = dsMap[unit.cIdx] || 0;
-                unit.ptsDS_NB = 0; unit.ptsDS_TH = 0;
-                unit.ptsDS_VD = roundToStandardScore(unit.dsVD * scoreDS);
-
-                unit.tlnNB = 0;
-                unit.tlnTH = tlnTH_map[unit.cIdx] || 0;
-                unit.tlnVD = tlnVD_map[unit.cIdx] || 0;
-                unit.ptsTLN_NB = 0;
-                unit.ptsTLN_TH = roundToStandardScore(unit.tlnTH * scoreTLN);
-                unit.ptsTLN_VD = roundToStandardScore(unit.tlnVD * scoreTLN);
-
-                // Tổng điểm tự luận theo các mức độ trong chương
-                let ptsNB = 0, ptsTH = 0, ptsVD = 0;
-                let cntNB = 0, cntTH = 0, cntVD = 0;
-
-                unit.essayList.forEach(es => {
-                    if (es.level === 'Biết') { ptsNB += es.pts; cntNB++; }
-                    else if (es.level === 'Hiểu') { ptsTH += es.pts; cntTH++; }
-                    else { ptsVD += es.pts; cntVD++; }
-                });
-
-                unit.ptsTL_NB = roundToStandardScore(ptsNB);
-                unit.ptsTL_TH = roundToStandardScore(ptsTH);
-                unit.ptsTL_VD = roundToStandardScore(ptsVD);
-
-                unit.tlNB = cntNB;
-                unit.tlTH = cntTH;
-                unit.tlVD = cntVD;
-            });
-
-            renderMatrixTable(aggregatedUnits);
-            renderSpecTable(aggregatedUnits);
-        }
-
-        function renderMatrixTable(aggregatedUnits) {
-            const tbody = document.getElementById('matrixTableBody');
-            tbody.innerHTML = '';
-
-            let sumNLC_NB = 0, sumNLC_TH = 0, sumNLC_VD = 0;
-            let sumDS_NB = 0, sumDS_TH = 0, sumDS_VD = 0;
-            let sumTLN_NB = 0, sumTLN_TH = 0, sumTLN_VD = 0;
-            let sumTL_NB = 0, sumTL_TH = 0, sumTL_VD = 0;
-
-            let ptsNLC_NB = 0, ptsNLC_TH = 0, ptsNLC_VD = 0;
-            let ptsDS_NB = 0, ptsDS_TH = 0, ptsDS_VD = 0;
-            let ptsTLN_NB = 0, ptsTLN_TH = 0, ptsTLN_VD = 0;
-            let ptsTL_NB = 0, ptsTL_TH = 0, ptsTL_VD = 0;
-
-            let totalPeriodsAll = aggregatedUnits.reduce((s, u) => s + u.periods, 0);
-
-            let roundedPercentList = aggregatedUnits.map(unit => {
-                let rawPercent = (unit.periods / totalPeriodsAll) * 100;
-                return Math.round(rawPercent / 5) * 5;
-            });
-
-            let sumPercent = roundedPercentList.reduce((a, b) => a + b, 0);
-            let diffPercent = 100 - sumPercent;
-
-            if (diffPercent !== 0 && aggregatedUnits.length > 0) {
-                let remainderList = aggregatedUnits.map((unit, i) => {
-                    let rawPercent = (unit.periods / totalPeriodsAll) * 100;
-                    return { index: i, rem: rawPercent - roundedPercentList[i] };
-                });
-                remainderList.sort((a, b) => b.rem - a.rem);
-                if (diffPercent > 0) {
-                    for (let k = 0; k < Math.abs(diffPercent) / 5; k++) {
-                        roundedPercentList[remainderList[k % remainderList.length].index] += 5;
-                    }
+                if (sumRate !== 100) {
+                    alertBox.classList.remove('hidden');
+                    alertText.innerText = `Tổng 3 tỷ lệ nhận thức phải bằng đúng 100% (Hiện tại: ${sumRate}%)`;
+                    return false;
+                } else if (Math.abs(totalScore - 10.0) > 0.01) {
+                    alertBox.classList.remove('hidden');
+                    alertText.innerText = `Cảnh báo: Tổng điểm cấu hình là ${totalScore.toFixed(1)}đ (Cần điều chỉnh về đúng 10.0đ)`;
+                    badgeBox.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 border border-red-300";
+                    return true;
                 } else {
-                    remainderList.sort((a, b) => a.rem - b.rem);
-                    for (let k = 0; k < Math.abs(diffPercent) / 5; k++) {
-                        roundedPercentList[remainderList[k % remainderList.length].index] -= 5;
-                    }
+                    alertBox.classList.add('hidden');
+                    badgeBox.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300";
+                    return true;
                 }
-            }
+            },
 
-            aggregatedUnits.forEach((unit, idx) => {
-                let row = document.createElement('tr');
+            render() {
+                document.getElementById('docSchool').innerText = document.getElementById('schoolName').value.toUpperCase();
+                document.getElementById('docExamType').innerText = document.getElementById('examType').value.toUpperCase();
+                document.getElementById('docExamTypeTitle').innerText = document.getElementById('examType').value.toUpperCase();
+                document.getElementById('docExamTypeSpecTitle').innerText = document.getElementById('examType').value.toUpperCase();
+                document.getElementById('docYear').innerText = document.getElementById('schoolYear').value;
 
-                sumNLC_NB += unit.nlcNB; sumNLC_TH += unit.nlcTH; sumNLC_VD += unit.nlcVD;
-                sumDS_NB += 0; sumDS_TH += 0; sumDS_VD += unit.dsVD;
-                sumTLN_NB += unit.tlnNB; sumTLN_TH += unit.tlnTH; sumTLN_VD += unit.tlnVD;
-                sumTL_NB += unit.tlNB; sumTL_TH += unit.tlTH; sumTL_VD += unit.tlVD;
+                if (!this.validateInputs()) return;
 
-                ptsNLC_NB += unit.ptsNLC_NB; ptsNLC_TH += unit.ptsNLC_TH; ptsNLC_VD += unit.ptsNLC_VD;
-                ptsDS_NB += unit.ptsDS_NB; ptsDS_TH += unit.ptsDS_TH; ptsDS_VD += unit.ptsDS_VD;
-                ptsTLN_NB += unit.ptsTLN_NB; ptsTLN_TH += unit.ptsTLN_TH; ptsTLN_VD += unit.ptsTLN_VD;
-                ptsTL_NB += unit.ptsTL_NB; ptsTL_TH += unit.ptsTL_TH; ptsTL_VD += unit.ptsTL_VD;
+                const chapters = MATH_CHAPTERS[this.currentGrade] || MATH_CHAPTERS["9"];
+                const checkboxes = document.querySelectorAll('.lesson-checkbox:checked');
+                
+                let chapterDataMap = {};
+                let totalPeriods = 0;
 
-                let totalNB = unit.nlcNB + unit.tlnNB + unit.tlNB;
-                let totalTH = unit.nlcTH + unit.tlnTH + unit.tlTH;
-                let totalVD = unit.nlcVD + unit.dsVD + unit.tlnVD + unit.tlVD;
+                checkboxes.forEach(cb => {
+                    const [cIdx, lIdx] = cb.value.split('_').map(Number);
+                    const chap = chapters[cIdx];
+                    const les = chap.lessons[lIdx];
 
-                let rowPtsNB = unit.ptsNLC_NB + unit.ptsDS_NB + unit.ptsTLN_NB + unit.ptsTL_NB;
-                let rowPtsTH = unit.ptsNLC_TH + unit.ptsDS_TH + unit.ptsTLN_TH + unit.ptsTL_TH;
-                let rowPtsVD = unit.ptsNLC_VD + unit.ptsDS_VD + unit.ptsTLN_VD + unit.ptsTL_VD;
+                    if (!chapterDataMap[cIdx]) {
+                        chapterDataMap[cIdx] = { cIdx, chapter: chap.chapter, unitName: chap.unitName || chap.chapter, periods: 0, lessons: [] };
+                    }
+                    chapterDataMap[cIdx].periods += les.periods;
+                    chapterDataMap[cIdx].lessons.push(les);
+                    totalPeriods += les.periods;
+                });
 
-                let ratioPercent = roundedPercentList[idx];
+                let aggregatedUnits = Object.values(chapterDataMap);
 
-                let cellTotalNB_Html = totalNB > 0 ? `${totalNB} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsNB)}đ)</span>` : (rowPtsNB > 0 ? `<span class="text-indigo-900">(${roundToStandardScore(rowPtsNB)}đ)</span>` : '');
-                let cellTotalTH_Html = totalTH > 0 ? `${totalTH} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsTH)}đ)</span>` : (rowPtsTH > 0 ? `<span class="text-indigo-900">(${roundToStandardScore(rowPtsTH)}đ)</span>` : '');
-                let cellTotalVD_Html = totalVD > 0 ? `${totalVD} câu<br><span class="text-indigo-900">(${roundToStandardScore(rowPtsVD)}đ)</span>` : (rowPtsVD > 0 ? `<span class="text-indigo-900">(${roundToStandardScore(rowPtsVD)}đ)</span>` : '');
+                if (aggregatedUnits.length === 0 || totalPeriods === 0) {
+                    document.getElementById('matrixTableBody').innerHTML = `<tr><td colspan="19" class="text-center py-4 text-slate-500 font-medium">Vui lòng chọn ít nhất một bài học.</td></tr>`;
+                    document.getElementById('specTableBody').innerHTML = `<tr><td colspan="16" class="text-center py-4 text-slate-500 font-medium">Vui lòng chọn ít nhất một bài học.</td></tr>`;
+                    return;
+                }
 
-                row.innerHTML = `
-                    <td>${idx + 1}</td>
-                    <td class="font-semibold text-left">${unit.chapter}</td>
-                    <td class="text-left font-medium">${unit.unitName} (${unit.periods} tiết)</td>
+                let numNLC = parseInt(document.getElementById('numNLC').value) || 0;
+                let scoreNLC = parseFloat(document.getElementById('scoreNLC').value) || 0;
+                let numDS = parseInt(document.getElementById('numDS').value) || 0;
+                let scoreDS = parseFloat(document.getElementById('scoreDS').value) || 0;
+                let numTLN = parseInt(document.getElementById('numTLN').value) || 0;
+                let scoreTLN = parseFloat(document.getElementById('scoreTLN').value) || 0;
+                let numTL = parseInt(document.getElementById('numTL').value) || 0;
+                let scoreTL = parseFloat(document.getElementById('scoreTL').value) || 0;
+
+                let rateNB = (parseInt(document.getElementById('rateNB').value) || 40) / 100;
+                let rateTH = (parseInt(document.getElementById('rateTH').value) || 40) / 100;
+                let rateVD = (parseInt(document.getElementById('rateVD').value) || 20) / 100;
+
+                let nlcNB_map = MatrixEngine.distributeSpreadCounts(Math.round(numNLC * rateNB), aggregatedUnits, 0);
+                let nlcTH_map = MatrixEngine.distributeSpreadCounts(Math.round(numNLC * rateTH), aggregatedUnits, 1);
+                let nlcVD_map = MatrixEngine.distributeSpreadCounts(numNLC - Math.round(numNLC * rateNB) - Math.round(numNLC * rateTH), aggregatedUnits, 2);
+
+                let dsNB_map = MatrixEngine.distributeSpreadCounts(Math.round(numDS * rateNB), aggregatedUnits, 3);
+                let dsTH_map = MatrixEngine.distributeSpreadCounts(Math.round(numDS * rateTH), aggregatedUnits, 4);
+                let dsVD_map = MatrixEngine.distributeSpreadCounts(numDS - Math.round(numDS * rateNB) - Math.round(numDS * rateTH), aggregatedUnits, 5);
+
+                let tlnNB_map = MatrixEngine.distributeSpreadCounts(Math.round(numTLN * rateNB), aggregatedUnits, 6);
+                let tlnTH_map = MatrixEngine.distributeSpreadCounts(Math.round(numTLN * rateTH), aggregatedUnits, 7);
+                let tlnVD_map = MatrixEngine.distributeSpreadCounts(numTLN - Math.round(numTLN * rateNB) - Math.round(numTLN * rateTH), aggregatedUnits, 8);
+
+                let nbCountTL = Math.round(numTL * rateNB);
+                let thCountTL = Math.round(numTL * rateTH);
+                let vdCountTL = numTL - nbCountTL - thCountTL;
+
+                let nbEssaysMap = MatrixEngine.distributeSpreadCounts(nbCountTL, aggregatedUnits, 9);
+                let thEssaysMap = MatrixEngine.distributeSpreadCounts(thCountTL, aggregatedUnits, 10);
+                let vdEssaysMap = MatrixEngine.distributeSpreadCounts(vdCountTL, aggregatedUnits, 11);
+
+                let globalEssayCounter = 1;
+
+                aggregatedUnits.forEach(unit => {
+                    unit.essayList = [];
+                    let unitRatio = unit.periods / totalPeriods;
+
+                    let c_nb = nbEssaysMap[unit.cIdx] || 0;
+                    let c_th = thEssaysMap[unit.cIdx] || 0;
+                    let c_vd = vdEssaysMap[unit.cIdx] || 0;
+
+                    let ptsPerNB = c_nb > 0 ? (scoreTL * rateNB * unitRatio) / c_nb : 0;
+                    let ptsPerTH = c_th > 0 ? (scoreTL * rateTH * unitRatio) / c_th : 0;
+                    let ptsPerVD = c_vd > 0 ? (scoreTL * rateVD * unitRatio) / c_vd : 0;
+
+                    for(let i=0; i<c_nb; i++) unit.essayList.push({ no: globalEssayCounter++, level: 'Biết', pts: MatrixEngine.roundScore(ptsPerNB) });
+                    for(let i=0; i<c_th; i++) unit.essayList.push({ no: globalEssayCounter++, level: 'Hiểu', pts: MatrixEngine.roundScore(ptsPerTH) });
+                    for(let i=0; i<c_vd; i++) unit.essayList.push({ no: globalEssayCounter++, level: 'Vận dụng', pts: MatrixEngine.roundScore(ptsPerVD) });
+
+                    unit.nlcNB = nlcNB_map[unit.cIdx] || 0; unit.nlcTH = nlcTH_map[unit.cIdx] || 0; unit.nlcVD = nlcVD_map[unit.cIdx] || 0;
+                    unit.ptsNLC_NB = MatrixEngine.roundScore(unit.nlcNB * scoreNLC); unit.ptsNLC_TH = MatrixEngine.roundScore(unit.nlcTH * scoreNLC); unit.ptsNLC_VD = MatrixEngine.roundScore(unit.nlcVD * scoreNLC);
+
+                    unit.dsNB = dsNB_map[unit.cIdx] || 0; unit.dsTH = dsTH_map[unit.cIdx] || 0; unit.dsVD = dsVD_map[unit.cIdx] || 0;
+                    unit.ptsDS_NB = MatrixEngine.roundScore(unit.dsNB * scoreDS); unit.ptsDS_TH = MatrixEngine.roundScore(unit.dsTH * scoreDS); unit.ptsDS_VD = MatrixEngine.roundScore(unit.dsVD * scoreDS);
+
+                    unit.tlnNB = tlnNB_map[unit.cIdx] || 0; unit.tlnTH = tlnTH_map[unit.cIdx] || 0; unit.tlnVD = tlnVD_map[unit.cIdx] || 0;
+                    unit.ptsTLN_NB = MatrixEngine.roundScore(unit.tlnNB * scoreTLN); unit.ptsTLN_TH = MatrixEngine.roundScore(unit.tlnTH * scoreTLN); unit.ptsTLN_VD = MatrixEngine.roundScore(unit.tlnVD * scoreTLN);
+
+                    unit.tlNB = unit.essayList.filter(e => e.level === 'Biết').length;
+                    unit.tlTH = unit.essayList.filter(e => e.level === 'Hiểu').length;
+                    unit.tlVD = unit.essayList.filter(e => e.level === 'Vận dụng').length;
                     
-                    <!-- TN NLC -->
-                    <td class="bg-blue-50/30">${formatCellContent(unit.nlcNB, unit.ptsNLC_NB)}</td>
-                    <td class="bg-blue-50/30">${formatCellContent(unit.nlcTH, unit.ptsNLC_TH)}</td>
-                    <td class="bg-blue-50/30">${formatCellContent(unit.nlcVD, unit.ptsNLC_VD)}</td>
+                    unit.ptsTL_NB = MatrixEngine.roundScore(unit.essayList.filter(e => e.level === 'Biết').reduce((s, e) => s + e.pts, 0));
+                    unit.ptsTL_TH = MatrixEngine.roundScore(unit.essayList.filter(e => e.level === 'Hiểu').reduce((s, e) => s + e.pts, 0));
+                    unit.ptsTL_VD = MatrixEngine.roundScore(unit.essayList.filter(e => e.level === 'Vận dụng').reduce((s, e) => s + e.pts, 0));
+                });
 
-                    <!-- TN DS -->
-                    <td class="bg-amber-50/30"></td>
-                    <td class="bg-amber-50/30"></td>
-                    <td class="bg-amber-50/30">${unit.dsVD > 0 ? `<div class="cell-q">${unit.dsVD} câu (4 ý)</div><div class="cell-pts">(${unit.ptsDS_VD}đ)</div>` : ''}</td>
+                this.renderMatrixTable(aggregatedUnits);
+                this.renderSpecTable(aggregatedUnits);
+            },
 
-                    <!-- TN TLN -->
-                    <td class="bg-yellow-50/30">${formatCellContent(unit.tlnNB, unit.ptsTLN_NB)}</td>
-                    <td class="bg-yellow-50/30">${formatCellContent(unit.tlnTH, unit.ptsTLN_TH)}</td>
-                    <td class="bg-yellow-50/30">${formatCellContent(unit.tlnVD, unit.ptsTLN_VD)}</td>
+            renderMatrixTable(aggregatedUnits) {
+                const tbody = document.getElementById('matrixTableBody');
+                tbody.innerHTML = '';
 
-                    <!-- TL -->
-                    <td class="bg-emerald-50/30">${unit.tlNB > 0 ? `<div class="cell-q">${unit.tlNB} bài</div><div class="cell-pts">(${unit.ptsTL_NB}đ)</div>` : ''}</td>
-                    <td class="bg-emerald-50/30">${unit.tlTH > 0 ? `<div class="cell-q">${unit.tlTH} bài</div><div class="cell-pts">(${unit.ptsTL_TH}đ)</div>` : ''}</td>
-                    <td class="bg-emerald-50/30 font-bold">${unit.tlVD > 0 ? `<div class="cell-q">${unit.tlVD} bài</div><div class="cell-pts">(${unit.ptsTL_VD}đ)</div>` : ''}</td>
-
-                    <!-- TỔNG -->
-                    <td class="bg-slate-100 font-bold">${cellTotalNB_Html}</td>
-                    <td class="bg-slate-100 font-bold">${cellTotalTH_Html}</td>
-                    <td class="bg-slate-100 font-bold">${cellTotalVD_Html}</td>
-
-                    <!-- TỈ LỆ % ĐIỂM -->
-                    <td class="font-bold text-indigo-900">${ratioPercent}%</td>
-                `;
-                tbody.appendChild(row);
-            });
-
-            let totalNB_All = sumNLC_NB + sumTLN_NB + sumTL_NB;
-            let totalTH_All = sumNLC_TH + sumTLN_TH + sumTL_TH;
-            let totalVD_All = sumNLC_VD + sumDS_VD + sumTLN_VD + sumTL_VD;
-
-            let rowTotalCâu = document.createElement('tr');
-            rowTotalCâu.className = "font-bold text-xs bg-slate-100";
-            rowTotalCâu.innerHTML = `
-                <td colspan="3" class="text-left font-bold">Tổng số câu (Tổng số tiết: ${totalPeriodsAll})</td>
-                <td>${sumNLC_NB}</td><td>${sumNLC_TH}</td><td>${sumNLC_VD}</td>
-                <td>0</td><td>0</td><td>${sumDS_VD}</td>
-                <td>${sumTLN_NB}</td><td>${sumTLN_TH}</td><td>${sumTLN_VD}</td>
-                <td>${sumTL_NB}</td><td>${sumTL_TH}</td><td>${sumTL_VD}</td>
-                <td class="text-indigo-950 font-extrabold">${totalNB_All} câu</td>
-                <td class="text-indigo-950 font-extrabold">${totalTH_All} câu</td>
-                <td class="text-indigo-950 font-extrabold">${totalVD_All} câu</td>
-                <td>100%</td>
-            `;
-            tbody.appendChild(rowTotalCâu);
-
-            let fmt = (val) => val > 0 ? roundToStandardScore(val).toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1') : '0';
-
-            let rateNBVal = parseInt(document.getElementById('rateNB').value) || 40;
-            let rateTHVal = parseInt(document.getElementById('rateTH').value) || 40;
-            let rateVDVal = parseInt(document.getElementById('rateVD').value) || 20;
-
-            let rowTotalĐiểm = document.createElement('tr');
-            rowTotalĐiểm.className = "font-bold text-xs bg-slate-100";
-            rowTotalĐiểm.innerHTML = `
-                <td colspan="3" class="text-left font-bold">Tổng số điểm</td>
-                <td colspan="3">${fmt(ptsNLC_NB + ptsNLC_TH + ptsNLC_VD)}</td>
-                <td colspan="3">${fmt(ptsDS_NB + ptsDS_TH + ptsDS_VD)}</td>
-                <td colspan="3">${fmt(ptsTLN_NB + ptsTLN_TH + ptsTLN_VD)}</td>
-                <td>${fmt(ptsTL_NB)}</td><td>${fmt(ptsTL_TH)}</td><td>${fmt(ptsTL_VD)}</td>
-                <td class="text-indigo-900 font-extrabold">${(10 * rateNBVal / 100).toFixed(1).replace(/\.0$/, '')}</td>
-                <td class="text-indigo-900 font-extrabold">${(10 * rateTHVal / 100).toFixed(1).replace(/\.0$/, '')}</td>
-                <td class="text-indigo-900 font-extrabold">${(10 * rateVDVal / 100).toFixed(1).replace(/\.0$/, '')}</td>
-                <td class="text-indigo-900 font-extrabold text-sm">10.0 điểm</td>
-            `;
-            tbody.appendChild(rowTotalĐiểm);
-
-            let rowTotalTỉLệ = document.createElement('tr');
-            rowTotalTỉLệ.className = "font-bold text-xs bg-slate-200";
-            rowTotalTỉLệ.innerHTML = `
-                <td colspan="3" class="text-left font-bold">Tỉ lệ %</td>
-                <td colspan="3">10%</td>
-                <td colspan="3">10%</td>
-                <td colspan="3">10%</td>
-                <td colspan="3">70%</td>
-                <td class="font-extrabold">${rateNBVal}%</td>
-                <td class="font-extrabold">${rateTHVal}%</td>
-                <td class="font-extrabold">${rateVDVal}%</td>
-                <td class="font-bold">100%</td>
-            `;
-            tbody.appendChild(rowTotalTỉLệ);
-        }
-
-        function renderSpecTable(aggregatedUnits) {
-            const tbody = document.getElementById('specTableBody');
-            tbody.innerHTML = '';
-
-            let numNLC = parseInt(document.getElementById('numNLC').value) || 0;
-            let numDS = parseInt(document.getElementById('numDS').value) || 0;
-            let numTLN = parseInt(document.getElementById('numTLN').value) || 0;
-
-            let currentNLCNum = 1;
-            let currentDSNum = numNLC + 1;
-            let currentTLNNum = numNLC + numDS + 1;
-
-            aggregatedUnits.forEach((unit, idx) => {
-                let levels = [
-                    { 
-                        level: "Biết", 
-                        qNLC: unit.nlcNB, 
-                        qDS: 0, 
-                        qTLN: unit.tlnNB, 
-                        essays: unit.essayList.filter(e => e.level === 'Biết'),
-                        desc: `Nhận biết được các kiến thức cơ bản về ${unit.unitName}.` 
-                    },
-                    { 
-                        level: "Hiểu", 
-                        qNLC: unit.nlcTH, 
-                        qDS: 0, 
-                        qTLN: unit.tlnTH, 
-                        essays: unit.essayList.filter(e => e.level === 'Hiểu'),
-                        desc: `Hiểu và biểu diễn được các nội dung trong ${unit.unitName}.` 
-                    },
-                    { 
-                        level: "Vận dụng", 
-                        qNLC: unit.nlcVD, 
-                        qDS: unit.dsVD, 
-                        qTLN: unit.tlnVD, 
-                        essays: unit.essayList.filter(e => e.level === 'Vận dụng'),
-                        desc: `Vận dụng linh hoạt kiến thức ${unit.unitName} vào giải quyết bài toán thực tiễn.` 
-                    }
-                ];
-
-                levels.forEach((lvl) => {
-                    let hasContent = lvl.qNLC > 0 || lvl.qDS > 0 || lvl.qTLN > 0 || lvl.essays.length > 0;
-                    if (!hasContent) return;
-
+                aggregatedUnits.forEach((unit, idx) => {
                     let row = document.createElement('tr');
+                    let totalNB = unit.nlcNB + unit.dsNB + unit.tlnNB + unit.tlNB;
+                    let totalTH = unit.nlcTH + unit.dsTH + unit.tlnTH + unit.tlTH;
+                    let totalVD = unit.nlcVD + unit.dsVD + unit.tlnVD + unit.tlVD;
 
-                    let nlcStr = '';
-                    if (lvl.qNLC > 0) {
-                        let qList = [];
-                        for (let i = 0; i < lvl.qNLC; i++) {
-                            qList.push(currentNLCNum++);
-                        }
-                        let qStrFormatted = qList.length === 1 ? `Câu ${qList[0]}` : `Câu ${qList.join(', ')}`;
-                        let totalPts = roundToStandardScore(lvl.qNLC * 0.25);
-                        let ptsStr = totalPts.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
-                        nlcStr = `<div class="cell-q">${qStrFormatted}</div><div class="cell-pts">(${ptsStr} điểm)</div>`;
-                    }
+                    let rowPtsNB = unit.ptsNLC_NB + unit.ptsDS_NB + unit.ptsTLN_NB + unit.ptsTL_NB;
+                    let rowPtsTH = unit.ptsNLC_TH + unit.ptsDS_TH + unit.ptsTLN_TH + unit.ptsTL_TH;
+                    let rowPtsVD = unit.ptsNLC_VD + unit.ptsDS_VD + unit.ptsTLN_VD + unit.ptsTL_VD;
 
-                    let dsStr = '';
-                    if (lvl.qDS > 0 && lvl.level === 'Vận dụng') {
-                        dsStr = `<div class="cell-q">Câu ${currentDSNum} (ý a,b,c,d)</div><div class="cell-pts">(1.0 điểm)</div>`;
-                    }
+                    // TÍNH TỈ LỆ % ĐIỂM CHUẨN THEO ĐIỂM SỐ THỰC TẾ
+                    let rowTotalScore = rowPtsNB + rowPtsTH + rowPtsVD;
+                    let ratioPercent = Math.round((rowTotalScore / 10.0) * 100);
 
-                    let tlnStr = '';
-                    if (lvl.qTLN > 0) {
-                        let qListTLN = [];
-                        for (let i = 0; i < lvl.qTLN; i++) {
-                            qListTLN.push(currentTLNNum++);
-                        }
-                        let qStrFormattedTLN = qListTLN.length === 1 ? `Câu ${qListTLN[0]}` : `Câu ${qListTLN.join(', ')}`;
-                        let totalPtsTLN = roundToStandardScore(lvl.qTLN * 0.5);
-                        let ptsStrTLN = totalPtsTLN.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
-                        tlnStr = `<div class="cell-q">${qStrFormattedTLN}</div><div class="cell-pts">(${ptsStrTLN} điểm)</div>`;
-                    }
-
-                    let tlNB_Str = '', tlTH_Str = '', tlVD_Str = '';
-                    if (lvl.essays.length > 0) {
-                        let htmlStr = '';
-                        lvl.essays.forEach(es => {
-                            let standardizedPts = roundToStandardScore(es.pts);
-                            let ptsFormatted = standardizedPts.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
-                            htmlStr += `<div class="cell-q">Bài ${es.no}</div><div class="cell-pts">(${ptsFormatted} điểm)</div>`;
-                        });
-
-                        if (lvl.level === 'Biết') tlNB_Str = htmlStr;
-                        else if (lvl.level === 'Hiểu') tlTH_Str = htmlStr;
-                        else if (lvl.level === 'Vận dụng') tlVD_Str = htmlStr;
-                    }
+                    let formatCell = (q, pts) => (q > 0 && pts > 0) ? `<div class="cell-q">${q}</div><div class="cell-pts">(${MatrixEngine.formatPts(pts)}đ)</div>` : '';
+                    let formatDSCell = (q, pts) => (q > 0 && pts > 0) ? `<div class="cell-q">${q} câu (4 ý)</div><div class="cell-pts">(${MatrixEngine.formatPts(pts)}đ)</div>` : '';
 
                     row.innerHTML = `
-                        <td class="text-center font-bold">${idx + 1}</td>
-                        <td class="font-semibold">${unit.chapter}</td>
-                        <td class="font-medium">${unit.unitName}</td>
-                        <td class="font-semibold ${lvl.level === 'Biết' ? 'text-blue-700' : lvl.level === 'Hiểu' ? 'text-amber-700' : 'text-red-700'}">${lvl.level}</td>
-                        <td class="text-xs">${lvl.desc}</td>
-                        
-                        <!-- TN NLC -->
-                        <td class="text-center bg-blue-50/20">${nlcStr}</td>
-                        <td class="text-center bg-blue-50/20"></td>
-                        <td class="text-center bg-blue-50/20"></td>
-
-                        <!-- TN DS -->
-                        <td class="text-center bg-amber-50/20"></td>
-                        <td class="text-center bg-amber-50/20"></td>
-                        <td class="text-center bg-amber-50/20">${dsStr}</td>
-
-                        <!-- TN TLN -->
-                        <td class="text-center bg-yellow-50/20"></td>
-                        <td class="text-center bg-yellow-50/20">${tlnStr}</td>
-                        <td class="text-center bg-yellow-50/20"></td>
-
-                        <!-- TL -->
-                        <td class="text-center bg-emerald-50/20 font-bold">${tlNB_Str}</td>
-                        <td class="text-center bg-emerald-50/20 font-bold">${tlTH_Str}</td>
-                        <td class="text-center bg-emerald-50/20 font-bold">${tlVD_Str}</td>
+                        <td>${idx + 1}</td>
+                        <td class="font-semibold text-left">${unit.chapter}</td>
+                        <td class="text-left font-medium">${unit.unitName} (${unit.periods} tiết)</td>
+                        <td class="bg-blue-50/30">${formatCell(unit.nlcNB, unit.ptsNLC_NB)}</td>
+                        <td class="bg-blue-50/30">${formatCell(unit.nlcTH, unit.ptsNLC_TH)}</td>
+                        <td class="bg-blue-50/30">${formatCell(unit.nlcVD, unit.ptsNLC_VD)}</td>
+                        <td class="bg-amber-50/30">${formatDSCell(unit.dsNB, unit.ptsDS_NB)}</td>
+                        <td class="bg-amber-50/30">${formatDSCell(unit.dsTH, unit.ptsDS_TH)}</td>
+                        <td class="bg-amber-50/30">${formatDSCell(unit.dsVD, unit.ptsDS_VD)}</td>
+                        <td class="bg-yellow-50/30">${formatCell(unit.tlnNB, unit.ptsTLN_NB)}</td>
+                        <td class="bg-yellow-50/30">${formatCell(unit.tlnTH, unit.ptsTLN_TH)}</td>
+                        <td class="bg-yellow-50/30">${formatCell(unit.tlnVD, unit.ptsTLN_VD)}</td>
+                        <td class="bg-emerald-50/30">${unit.tlNB > 0 ? `<div class="cell-q">${unit.tlNB} bài</div><div class="cell-pts">(${MatrixEngine.formatPts(unit.ptsTL_NB)}đ)</div>` : ''}</td>
+                        <td class="bg-emerald-50/30">${unit.tlTH > 0 ? `<div class="cell-q">${unit.tlTH} bài</div><div class="cell-pts">(${MatrixEngine.formatPts(unit.ptsTL_TH)}đ)</div>` : ''}</td>
+                        <td class="bg-emerald-50/30 font-bold">${unit.tlVD > 0 ? `<div class="cell-q">${unit.tlVD} bài</div><div class="cell-pts">(${MatrixEngine.formatPts(unit.ptsTL_VD)}đ)</div>` : ''}</td>
+                        <td class="bg-slate-100 font-bold">${totalNB > 0 ? `${totalNB} câu<br>(${MatrixEngine.formatPts(rowPtsNB)}đ)` : ''}</td>
+                        <td class="bg-slate-100 font-bold">${totalTH > 0 ? `${totalTH} câu<br>(${MatrixEngine.formatPts(rowPtsTH)}đ)` : ''}</td>
+                        <td class="bg-slate-100 font-bold">${totalVD > 0 ? `${totalVD} câu<br>(${MatrixEngine.formatPts(rowPtsVD)}đ)` : ''}</td>
+                        <td class="font-bold text-indigo-900">${ratioPercent}%</td>
                     `;
                     tbody.appendChild(row);
                 });
-            });
-        }
+            },
 
-        function switchTab(tab) {
-            const matrixView = document.getElementById('tabMatrixView');
-            const specView = document.getElementById('tabSpecView');
-            const matrixBtn = document.getElementById('tabMatrixBtn');
-            const specBtn = document.getElementById('tabSpecBtn');
+            renderSpecTable(aggregatedUnits) {
+                const tbody = document.getElementById('specTableBody');
+                tbody.innerHTML = '';
 
-            if (tab === 'matrix') {
-                matrixView.classList.remove('hidden');
-                specView.classList.add('hidden');
-                matrixBtn.className = "px-4 py-2 rounded-lg font-bold text-xs bg-indigo-800 text-white shadow";
-                specBtn.className = "px-4 py-2 rounded-lg font-bold text-xs bg-slate-200 text-slate-700 hover:bg-slate-300";
-            } else {
-                matrixView.classList.add('hidden');
-                specView.classList.remove('hidden');
-                specBtn.className = "px-4 py-2 rounded-lg font-bold text-xs bg-indigo-800 text-white shadow";
-                matrixBtn.className = "px-4 py-2 rounded-lg font-bold text-xs bg-slate-200 text-slate-700 hover:bg-slate-300";
+                let currentNLCNum = 1;
+                let currentDSNum = (parseInt(document.getElementById('numNLC').value) || 0) + 1;
+                let currentTLNNum = currentDSNum + (parseInt(document.getElementById('numDS').value) || 0);
+
+                aggregatedUnits.forEach((unit, idx) => {
+                    let levels = [
+                        { level: "Biết", qNLC: unit.nlcNB, qDS: unit.dsNB, qTLN: unit.tlnNB, essays: unit.essayList.filter(e => e.level === 'Biết'), desc: `Nhận biết kiến thức về ${unit.unitName}.` },
+                        { level: "Hiểu", qNLC: unit.nlcTH, qDS: unit.dsTH, qTLN: unit.tlnTH, essays: unit.essayList.filter(e => e.level === 'Hiểu'), desc: `Hiểu và giải thích được nội dung trong ${unit.unitName}.` },
+                        { level: "Vận dụng", qNLC: unit.nlcVD, qDS: unit.dsVD, qTLN: unit.tlnVD, essays: unit.essayList.filter(e => e.level === 'Vận dụng'), desc: `Vận dụng linh hoạt kiến thức ${unit.unitName} vào giải quyết vấn đề.` }
+                    ];
+
+                    levels.forEach((lvl) => {
+                        if (lvl.qNLC === 0 && lvl.qDS === 0 && lvl.qTLN === 0 && lvl.essays.length === 0) return;
+
+                        let row = document.createElement('tr');
+                        let nlcStr = lvl.qNLC > 0 ? `<div class="cell-q">Câu ${Array.from({length: lvl.qNLC}, () => currentNLCNum++).join(', ')}</div><div class="cell-pts">(${MatrixEngine.formatPts(lvl.qNLC * 0.25)} điểm)</div>` : '';
+                        let dsStr = lvl.qDS > 0 ? `<div class="cell-q">Câu ${Array.from({length: lvl.qDS}, () => currentDSNum++).join(', ')} (4 ý)</div><div class="cell-pts">(${MatrixEngine.formatPts(lvl.qDS * 1.0)} điểm)</div>` : '';
+                        let tlnStr = lvl.qTLN > 0 ? `<div class="cell-q">Câu ${Array.from({length: lvl.qTLN}, () => currentTLNNum++).join(', ')}</div><div class="cell-pts">(${MatrixEngine.formatPts(lvl.qTLN * 0.5)} điểm)</div>` : '';
+                        
+                        let essayStr = lvl.essays.map(es => `<div class="cell-q">Bài ${es.no}</div><div class="cell-pts">(${MatrixEngine.formatPts(es.pts)} điểm)</div>`).join('');
+
+                        row.innerHTML = `
+                            <td class="text-center font-bold">${idx + 1}</td>
+                            <td class="font-semibold">${unit.chapter}</td>
+                            <td class="font-medium">${unit.unitName}</td>
+                            <td class="font-semibold ${lvl.level === 'Biết' ? 'text-blue-700' : lvl.level === 'Hiểu' ? 'text-amber-700' : 'text-red-700'}">${lvl.level}</td>
+                            <td class="text-xs">${lvl.desc}</td>
+                            <td class="text-center bg-blue-50/20">${nlcStr}</td><td class="text-center bg-blue-50/20"></td><td class="text-center bg-blue-50/20"></td>
+                            <td class="text-center bg-amber-50/20">${lvl.level === 'Biết' ? dsStr : ''}</td><td class="text-center bg-amber-50/20">${lvl.level === 'Hiểu' ? dsStr : ''}</td><td class="text-center bg-amber-50/20">${lvl.level === 'Vận dụng' ? dsStr : ''}</td>
+                            <td class="text-center bg-yellow-50/20"></td><td class="text-center bg-yellow-50/20">${tlnStr}</td><td class="text-center bg-yellow-50/20"></td>
+                            <td class="text-center bg-emerald-50/20 font-bold">${lvl.level === 'Biết' ? essayStr : ''}</td>
+                            <td class="text-center bg-emerald-50/20 font-bold">${lvl.level === 'Hiểu' ? essayStr : ''}</td>
+                            <td class="text-center bg-emerald-50/20 font-bold">${lvl.level === 'Vận dụng' ? essayStr : ''}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                });
+            },
+
+            switchTab(tab) {
+                document.getElementById('tabMatrixView').classList.toggle('hidden', tab !== 'matrix');
+                document.getElementById('tabSpecView').classList.toggle('hidden', tab !== 'spec');
+                document.getElementById('tabMatrixBtn').className = tab === 'matrix' ? "px-4 py-2 rounded-lg font-bold text-xs bg-indigo-800 text-white shadow" : "px-4 py-2 rounded-lg font-bold text-xs bg-slate-200 text-slate-700 hover:bg-slate-300";
+                document.getElementById('tabSpecBtn').className = tab === 'spec' ? "px-4 py-2 rounded-lg font-bold text-xs bg-indigo-800 text-white shadow" : "px-4 py-2 rounded-lg font-bold text-xs bg-slate-200 text-slate-700 hover:bg-slate-300";
+            },
+
+            exportWord() {
+                const content = document.getElementById('exportDocument').innerHTML;
+                const converted = htmlDocx.asBlob(`
+                    <!DOCTYPE html><html><head><meta charset="utf-8"><style>body { font-family: 'Times New Roman', serif; } table { border-collapse: collapse; width: 100%; } td, th { border: 1px solid black; padding: 5px; text-align: center; } .cell-q { font-size: 10pt; } .cell-pts { font-weight: bold; font-size: 9pt; color: #000; }</style></head><body>${content}</body></html>
+                `);
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(converted);
+                a.download = `Ma_Tran_Dac_Ta_Toan_${this.currentGrade}_MyThuong.docx`;
+                a.click();
             }
-        }
+        };
 
-        function exportWord() {
-            const content = document.getElementById('exportDocument').innerHTML;
-            const converted = htmlDocx.asBlob(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="utf-8">
-                    <style>
-                        body { font-family: 'Times New Roman', serif; }
-                        table { border-collapse: collapse; width: 100%; }
-                        td, th { border: 1px solid black; padding: 5px; text-align: center; }
-                        .cell-q { font-size: 10pt; }
-                        .cell-pts { font-weight: bold; font-size: 9pt; color: #000; }
-                    </style>
-                </head>
-                <body>${content}</body>
-                </html>
-            `);
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(converted);
-            a.download = `Ma_Tran_Dac_Ta_Toan_${currentGrade}_QGN.docx`;
-            a.click();
-        }
+        window.onload = () => AppController.init();
     </script>
 </body>
 </html>
